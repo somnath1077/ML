@@ -3,8 +3,8 @@ from typing import List
 from sklearn.neural_network import MLPClassifier
 from sklearn.feature_extraction.text import CountVectorizer
 
-from text_classification.utils import load_training_data, fetch_data, write_to_file, out_file, error_rate, \
-    trainings_file
+from text_classification.utils import load_training_data, fetch_data, \
+    write_to_file, out_file, error_rate, trainings_file
 
 
 def vectorize(sentences: List[str]):
