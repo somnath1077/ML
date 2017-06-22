@@ -55,7 +55,7 @@ if __name__ == '__main__':
     chunk_size = len(test_data)
 
 
-    with open(err_file, 'wb') as f:
+    with open(err_file, 'w') as f:
         for hidden_layer in hidden_layer_size:
             classifier, vectorizer, mean_err, sd_err = train_model(training_data,
                                                                    labels,
