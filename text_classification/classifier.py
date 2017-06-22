@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer, TfidfVectorizer
 from sklearn.neural_network import MLPClassifier
 
 from text_classification.utils import load_training_data, error_rate, load_test_data, write_to_file, out_file
@@ -10,14 +10,17 @@ def train_model(inputs, labels, chunk_size):
     folds = {(i * chunk_size, (i + 1) * chunk_size) for i in range(0, number_partitions)}
     err_rates = []
 
-    classifier = MLPClassifier(solver='lbfgs',
-                               activation='logistic',
-                               alpha=1e-5,
-                               hidden_layer_sizes=(100, 2),
-                               random_state=1)
-    vectorizer = CountVectorizer(min_df=1)
-
+    classifier = None
+    #vectorizer = CountVectorizer(min_df=1)
+    vectorizer = TfidfVectorizer(min_df=1)
     for val_set in folds:
+        classifier = MLPClassifier(solver='lbfgs',
+                                   activation='logistic',
+                                   alpha=1e-5,
+                                   hidden_layer_sizes=(36, 2),
+                                   random_state=1)
+
+
         print("current validation set = ", val_set)
         training_sets = folds.difference({val_set})
 
