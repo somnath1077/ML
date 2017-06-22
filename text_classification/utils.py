@@ -6,14 +6,12 @@ import os
 dir = os.path.dirname(__file__)
 input_file = os.path.join(dir, './data/xtrain_obfuscated.txt')
 labels_file = os.path.join(dir, './data/ytrain.txt')
-trainings_file = os.path.join(dir, './data/xtest_obfuscated.txt')
+test_data_file = os.path.join(dir, './data/xtest_obfuscated.txt')
 out_file = os.path.join(dir, './data/ytest.txt')
 
-def error_rate():
-    training_labels = fetch_data(labels_file)
-    predicted_labels = fetch_data(out_file)
-    err = [(i, j) for i, j in zip(training_labels, predicted_labels) if i != j]
-    err_rate = (len(err) / len(training_labels)) * 100
+def error_rate(predicted_labels, actual_labels):
+    err = [(i, j) for i, j in zip(actual_labels, predicted_labels) if i != j]
+    err_rate = (len(err) / len(actual_labels)) * 100
     return err_rate
 
 def write_to_file(file, data):
