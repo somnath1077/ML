@@ -16,7 +16,7 @@ def classify(X, y):
     classifier = MLPClassifier(solver='lbfgs',
                                activation='logistic',
                                alpha=1e-5,
-                               hidden_layer_sizes = (8, 2),
+                               hidden_layer_sizes = (10, ),
                                random_state = 1)
     classifier.fit(X, y)
     return classifier
