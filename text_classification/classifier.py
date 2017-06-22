@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.neural_network import MLPClassifier
 
-from text_classification.utils import load_training_data, error_rate
+from text_classification.utils import load_training_data, error_rate, load_test_data, write_to_file, out_file
 
 
 def train_model(inputs, labels, chunk_size):
@@ -13,7 +13,7 @@ def train_model(inputs, labels, chunk_size):
     classifier = MLPClassifier(solver='lbfgs',
                                activation='logistic',
                                alpha=1e-5,
-                               hidden_layer_sizes=(40, 3),
+                               hidden_layer_sizes=(100, 2),
                                random_state=1)
     vectorizer = CountVectorizer(min_df=1)
 
@@ -37,12 +37,20 @@ def train_model(inputs, labels, chunk_size):
     return classifier, vectorizer, mean_err, sd_err
 
 
-def predict(classifier, X):
-    return classifier.predict(X)
+def predict(classifier, vectorizer, test_data):
+    X_test = vectorizer.transform(test_data)
+    pred = classifier.predict(X_test)
+    return pred
 
 
 if __name__ == '__main__':
-    sentences, novels = load_training_data()
-    classifier, vectorizer, mean_err, sd_err = train_model(sentences, novels, 3000)
+    training_data, labels = load_training_data()
+    test_data = load_test_data()
+
+    chunk_size = len(test_data)
+    classifier, vectorizer, mean_err, sd_err = train_model(training_data, labels, chunk_size)
     print("Mean error = ", mean_err)
     print("SD error = ", sd_err)
+
+    pred = predict(classifier, vectorizer, test_data)
+    write_to_file(out_file, pred)

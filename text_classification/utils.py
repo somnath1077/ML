@@ -26,6 +26,9 @@ def fetch_data(file):
             lst.append(line)
     return lst
 
+def load_test_data():
+    return fetch_data(test_data_file)
+
 def load_training_data():
     sentences = fetch_data(input_file)
     novels = fetch_data(labels_file)
