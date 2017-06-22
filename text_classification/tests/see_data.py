@@ -1,12 +1,14 @@
 import hashlib
 import re
 
+from text_classification.utils import input_file
+
 
 def bag_of_words():
     bag = {}
 
     regex_pattern = b'[><,:;.^%#!@\[\]~`\'\"=+{}?\-\\ ]+'
-    with open('xtrain_obfuscated.txt', 'rb') as f:
+    with open(input_file, 'rb') as f:
         for line in f:
             cleaned_line = line.strip()
             words = re.split(regex_pattern, cleaned_line)
@@ -22,7 +24,7 @@ def bag_of_words():
 def hash_words():
     bag = {}
 
-    with open('xtrain_obfuscated.txt', 'rb') as f:
+    with open(input_file, 'rb') as f:
         for line in f:
             cleaned_line = line.strip()
             hsh = hashlib.sha1(cleaned_line)
@@ -34,7 +36,7 @@ def hash_words():
         print('word = ', word, ' count = ', count)
 
 def see():
-    with open('xtrain_obfuscated.txt', 'rb') as f:
+    with open(input_file, 'rb') as f:
         count = 1
         min = 100000
         lx = None
