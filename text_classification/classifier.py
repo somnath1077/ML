@@ -1,5 +1,3 @@
-from typing import List
-
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.neural_network import MLPClassifier
@@ -15,9 +13,8 @@ def train_model(inputs, labels, chunk_size):
     classifier = MLPClassifier(solver='lbfgs',
                                activation='logistic',
                                alpha=1e-5,
-                               hidden_layer_sizes=(40, 5),
-                               random_state=1,
-                               warm_start=True)
+                               hidden_layer_sizes=(40, 3),
+                               random_state=1)
     vectorizer = CountVectorizer(min_df=1)
 
     for val_set in folds:
@@ -38,22 +35,6 @@ def train_model(inputs, labels, chunk_size):
     mean_err = np.mean(err_rates)
     sd_err = np.std(err_rates)
     return classifier, vectorizer, mean_err, sd_err
-
-
-def vectorize(sentences: List[str]):
-    vectorizer = CountVectorizer(min_df=1)
-    X = vectorizer.fit_transform(sentences)
-    return X
-
-
-def classify(X, y):
-    classifier = MLPClassifier(solver='lbfgs',
-                               activation='logistic',
-                               alpha=1e-5,
-                               hidden_layer_sizes=(10,),
-                               random_state=1)
-    classifier.fit(X, y)
-    return classifier
 
 
 def predict(classifier, X):
