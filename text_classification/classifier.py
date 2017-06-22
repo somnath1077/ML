@@ -3,7 +3,7 @@ import os
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer, TfidfVectorizer
 from sklearn.neural_network import MLPClassifier
 
-from text_classification.utils import load_training_data, error_rate, load_test_data, write_to_file, out_file
+from text_classification.utils import load_training_data, error_rate, load_test_data, write_to_file, out_file, err_file
 
 
 def train_model(inputs, labels, chunk_size, hidden_layer_size):
@@ -53,11 +53,14 @@ if __name__ == '__main__':
 
     hidden_layer_size = [(i, j) for i in range(5, 30, 5) for j in range(1, 4)]
     chunk_size = len(test_data)
-    err_file = os.path.join(dir, './data/error_rates.txt')
+
 
     with open(err_file, 'wb') as f:
         for hidden_layer in hidden_layer_size:
-            classifier, vectorizer, mean_err, sd_err = train_model(training_data, labels, chunk_size)
+            classifier, vectorizer, mean_err, sd_err = train_model(training_data,
+                                                                   labels,
+                                                                   chunk_size,
+                                                                   hidden_layer)
 
             message = "hidden layer size: {}".format(hidden_layer) + \
                       " mean error = {}".format(mean_err) + " sd error = {}".format(sd_err)

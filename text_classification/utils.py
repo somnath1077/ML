@@ -8,6 +8,7 @@ input_file = os.path.join(dir, './data/xtrain_obfuscated.txt')
 labels_file = os.path.join(dir, './data/ytrain.txt')
 test_data_file = os.path.join(dir, './data/xtest_obfuscated.txt')
 out_file = os.path.join(dir, './data/ytest.txt')
+err_file = os.path.join(dir, './data/error_rates.txt')
 
 def error_rate(predicted_labels, actual_labels):
     err = [(i, j) for i, j in zip(actual_labels, predicted_labels) if i != j]
