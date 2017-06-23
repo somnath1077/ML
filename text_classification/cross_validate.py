@@ -1,5 +1,5 @@
 import numpy as np
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.neural_network import MLPClassifier
 
 from text_classification.utils import load_training_data, error_rate, load_test_data, err_file
@@ -10,8 +10,8 @@ def cross_validate(inputs, labels, chunk_size, hidden_layer_size):
     folds = {(i * chunk_size, (i + 1) * chunk_size) for i in range(0, number_partitions)}
     err_rates = []
 
-    vectorizer = CountVectorizer(min_df=1)
-    # vectorizer = TfidfVectorizer(min_df=1)
+    #vectorizer = CountVectorizer(min_df=1)
+    vectorizer = TfidfVectorizer(min_df=1)
     for val_set in folds:
         classifier = MLPClassifier(solver='adam',
                                    activation='logistic',
@@ -42,7 +42,7 @@ def cross_validate_input():
     training_data, labels = load_training_data()
     test_data = load_test_data()
 
-    hidden_layer_size = [(i, i, i) for i in [50, 60, 70]]
+    hidden_layer_size = [(i, i) for i in [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]]
     chunk_size = len(test_data)
 
     with open(err_file, 'w') as f:
