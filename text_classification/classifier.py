@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
     with open(err_file, 'w') as f:
         for hidden_layer in hidden_layer_size:
-            print("processing for hidden_layer {}".format(hidden_layer))
+            print("processing for hidden layer parameter {}".format(hidden_layer))
             classifier, vectorizer, mean_err, sd_err = train_model(training_data,
                                                                    labels,
                                                                    chunk_size,

@@ -1,1 +1,0 @@
-hidden layer size: (10, 1) mean error = 65.82 sd error = 1.91
