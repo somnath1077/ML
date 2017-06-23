@@ -51,7 +51,7 @@ if __name__ == '__main__':
     training_data, labels = load_training_data()
     test_data = load_test_data()
 
-    hidden_layer_size = [(i, j) for i in range(10, 50, 10) for j in range(4, 8)]
+    hidden_layer_size = [(i, i) for i in [10, 20, 30, 40]]
     chunk_size = len(test_data)
 
 
