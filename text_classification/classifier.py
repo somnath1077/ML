@@ -15,7 +15,7 @@ def train_model(inputs, labels, chunk_size, hidden_layer_size):
     vectorizer = CountVectorizer(min_df=1)
     # vectorizer = TfidfVectorizer(min_df=1)
     for val_set in folds:
-        classifier = MLPClassifier(solver='lbfgs',
+        classifier = MLPClassifier(solver='adam',
                                    activation='logistic',
                                    alpha=1e-5,
                                    hidden_layer_sizes=hidden_layer_size,
