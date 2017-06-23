@@ -1,0 +1,15 @@
+hidden layer size: (5, 1) mean error = 76.15 sd error = 1.3550112750658432
+hidden layer size: (5, 2) mean error = 67.74666666666667 sd error = 1.5699398431504037
+hidden layer size: (5, 3) mean error = 63.45 sd error = 1.3366001645967278
+hidden layer size: (10, 1) mean error = 65.81666666666669 sd error = 1.906145033539916
+hidden layer size: (10, 2) mean error = 68.33 sd error = 1.4267640153702905
+hidden layer size: (10, 3) mean error = 61.29333333333334 sd error = 0.8989870843220038
+hidden layer size: (15, 1) mean error = 71.99333333333333 sd error = 0.8580080289704608
+hidden layer size: (15, 2) mean error = 65.66333333333333 sd error = 0.9143850392476908
+hidden layer size: (15, 3) mean error = 61.84999999999999 sd error = 0.9807310198690248
+hidden layer size: (20, 1) mean error = 72.81333333333333 sd error = 1.0678326960093807
+hidden layer size: (20, 2) mean error = 65.51333333333332 sd error = 0.7014587973961433
+hidden layer size: (20, 3) mean error = 63.15 sd error = 1.0478814606412101
+hidden layer size: (25, 1) mean error = 73.66 sd error = 0.9062499042145544
+hidden layer size: (25, 2) mean error = 68.09666666666666 sd error = 2.3140368766868584
+hidden layer size: (25, 3) mean error = 61.57333333333334 sd error = 1.7164433511706036

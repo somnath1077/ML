@@ -51,7 +51,7 @@ if __name__ == '__main__':
     training_data, labels = load_training_data()
     test_data = load_test_data()
 
-    hidden_layer_size = [(i, j) for i in range(30, 60, 10) for j in range(4, 10)]
+    hidden_layer_size = [(i, j) for i in range(10, 50, 10) for j in range(4, 8)]
     chunk_size = len(test_data)
 
 
@@ -63,6 +63,8 @@ if __name__ == '__main__':
                                                                    chunk_size,
                                                                    hidden_layer)
 
+            mean_err = round(mean_err, 2)
+            sd_err = round(sd_err, 2)
             message = "hidden layer size: {}".format(hidden_layer) + \
                       " mean error = {}".format(mean_err) + " sd error = {}".format(sd_err)
             f.write(message)
