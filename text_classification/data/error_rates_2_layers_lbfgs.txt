@@ -1,4 +1,0 @@
-hidden layer size: (10, 10) mean error = 58.35 sd error = 0.74
-hidden layer size: (20, 20) mean error = 52.48 sd error = 0.72
-hidden layer size: (30, 30) mean error = 53.42 sd error = 0.7
-hidden layer size: (40, 40) mean error = 52.08 sd error = 0.66
