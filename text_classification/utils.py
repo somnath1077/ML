@@ -41,3 +41,13 @@ def load_training_data():
     assert len(sentences) == len(novels)
     # print(len(sentences))
     return sentences, novels
+
+def get_new_inputs_labels(inputs, labels, segment):
+    ret_inputs = []
+    ret_labels = []
+    for idx, (inp, lab) in enumerate(zip(inputs, labels)):
+        if idx < segment[0] or idx >= segment[1]:
+            ret_inputs.append(inp)
+            ret_labels.append(lab)
+    return ret_inputs, ret_labels
+
