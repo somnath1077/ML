@@ -72,7 +72,7 @@ def cross_validate_input():
     training_data, labels = load_training_data()
     test_data = load_test_data()
 
-    hidden_layer_size = [(i, i) for i in [100, 110, 120]]
+    hidden_layer_size = [(90, 70), (90, 80), (90, 100)]
     chunk_size = len(test_data)
 
     with open(err_file, 'w') as f:
