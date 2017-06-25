@@ -1,3 +1,9 @@
+Cross-validations results
+
+Activation function: tanh
+Learning rate: adaptive
+
+
 hidden layer size: (10, 10) mean error = 32.26 sd error = 0.99
 hidden layer size: (20, 20) mean error = 27.78 sd error = 0.79
 hidden layer size: (30, 30) mean error = 27.01 sd error = 0.61

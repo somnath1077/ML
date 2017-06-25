@@ -1,3 +1,9 @@
+Cross-validations results
+
+Activation function: logistic
+Learning rate: adaptive
+
+
 hidden layer size: (70, 70) mean error = 26.54 sd error = 0.91
 hidden layer size: (80, 80) mean error = 26.45 sd error = 0.72
 hidden layer size: (90, 90) mean error = 26.16 sd error = 0.6
