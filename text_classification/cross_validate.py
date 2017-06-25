@@ -14,7 +14,7 @@ def cross_validate(inputs, labels, chunk_size, hidden_layer_size):
     # vectorizer = TfidfVectorizer(min_df=1)
     for val_set in folds:
         classifier = MLPClassifier(solver='adam',
-                                   activation='tanh',
+                                   activation='logistic',
                                    alpha=1e-5,
                                    hidden_layer_sizes=hidden_layer_size,
                                    random_state=1,
@@ -41,7 +41,7 @@ def cross_validate_input():
     training_data, labels = load_training_data()
     test_data = load_test_data()
 
-    hidden_layer_size = [(i, i) for i in [40, 50, 60, 70, 80, 90, 100]]
+    hidden_layer_size = [(i, i) for i in [70, 80, 90]]
     chunk_size = len(test_data)
 
     with open(err_file, 'w') as f:
