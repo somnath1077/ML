@@ -15,18 +15,20 @@ def train_model_and_predict(inputs, labels, test_data, hidden_layer_size):
     X_train = vectorizer.fit_transform(inputs)
     y = labels
 
-    print("started training ...")
+    print("starting training ...")
     classifier.fit(X_train, y)
-    print("finished training ...")
+    print("done ...")
 
+    print("starting predicting ...")
     X_validation = vectorizer.transform(test_data)
     pred = classifier.predict(X_validation)
+    print("done ...")
     return pred
 
 
 if __name__ == '__main__':
     inputs, labels = load_training_data()
     test_data = load_test_data()
-    hidden_layer_size = (3, 3)
+    hidden_layer_size = (90, 90)
     pred = train_model_and_predict(inputs, labels, test_data, hidden_layer_size)
     write_to_file(out_file, pred)
