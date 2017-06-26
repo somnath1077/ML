@@ -33,19 +33,23 @@ def get_new_inputs_labels(X, y, val_set):
     return np.array(X_ret), np.array(y_ret)
 
 
-def cross_validate_model(X: np.array, y: np.array, chunk_size: int, model_type: str):
+def cross_validate_model(X: np.ndarray, y: np.ndarray, chunk_size: int):
     num_rows = X.shape[0]
     if num_rows == 0:
         raise RuntimeError('Empty training matrix!')
 
+    error_rates = []
     folds = get_folds(num_rows, chunk_size)
     for val_set in folds:
         print("current validation set = ", val_set)
-        training_set, label_set = get_new_inputs_labels(X, y, val_set)
-        pass
+        training_inputs, training_labels = get_new_inputs_labels(X, y, val_set)
+        regression_model = linear_model.LinearRegression()
+        regression_model.fit(training_inputs, training_labels)
 
+        prediction = regression_model.predict(X[val_set[0]: val_set[1]])
+        error_rates.append(np.mean((prediction - y[val_set[0]: val_set[1]]) ** 2))
 
-
+    return error_rates
 
 def get_trained_linear_model(X, y):
     reg = linear_model.LinearRegression()
@@ -55,4 +59,5 @@ def get_trained_linear_model(X, y):
 
 if __name__ == '__main__':
     X, y = load_training_data()
-    cross_validate_linear_model(X, y, chunk_size=100000)
+    error_rates = cross_validate_model(X, y, chunk_size=100000)
+    print(np.mean(np.array(error_rates)))
