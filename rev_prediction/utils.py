@@ -52,5 +52,4 @@ def load_test_data():
                          delimiter=',',
                          skip_header=False,
                          usecols=(1,2,4,5,6))
-    return X_test
-
+    return remove_nans(X_test)
