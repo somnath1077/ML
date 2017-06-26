@@ -21,14 +21,16 @@ def get_folds(num_rows, chunk_size):
     return folds
 
 
-def get_new_inputs_labels(X: np.array, y: np.array, val_set: Tuple(int, int)):
+def get_new_inputs_labels(X, y, val_set):
     """
         X: np.array of inputs
         y: np.array of labels
         val_set: tuple indexing rows of X and y that form the validation set
 
     """
-    return None, None
+    X_ret = np.array(X[i] for i in range(X.shape[0]) if i < val_set[0] or i >= val_set[1])
+    y_ret = np.array(y[i] for i in range(y.shape[0]) if i < val_set[0] or i >= val_set[1])
+    return X_ret, y_ret
 
 
 def cross_validate_model(X: np.array, y: np.array, chunk_size: int, model_type: str):
