@@ -1,0 +1,3 @@
+# Model Types
+
+LINEAR = 'linear'
