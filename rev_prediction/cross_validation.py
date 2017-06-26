@@ -28,9 +28,9 @@ def get_new_inputs_labels(X, y, val_set):
         val_set: tuple indexing rows of X and y that form the validation set
 
     """
-    X_ret = np.array(X[i] for i in range(X.shape[0]) if i < val_set[0] or i >= val_set[1])
-    y_ret = np.array(y[i] for i in range(y.shape[0]) if i < val_set[0] or i >= val_set[1])
-    return X_ret, y_ret
+    X_ret = [X[i] for i in range(X.shape[0]) if i < val_set[0] or i >= val_set[1]]
+    y_ret = [y[i] for i in range(y.shape[0]) if i < val_set[0] or i >= val_set[1]]
+    return np.array(X_ret), np.array(y_ret)
 
 
 def cross_validate_model(X: np.array, y: np.array, chunk_size: int, model_type: str):
