@@ -15,14 +15,12 @@ def generate_y(y_prime):
     return y
 
 
-def remove_nans(X, y):
-    x_cols = X.shape[1]
-    C = np.append(X, y, axis=1)
-    C_prime = C[~np.isnan(C).any(axis=1)]
-    C_prime[C_prime == np.inf] = 0
-    C_prime[C_prime == -np.inf] = 0
-    C_prime[C_prime == np.nan] = 0
-    return C_prime[:, [0, x_cols - 1]], C_prime[:, [x_cols]]
+def remove_nans(C):
+    D = C[~np.isnan(C).any(axis=1)]
+    D[D == np.inf] = 0
+    D[D == -np.inf] = 0
+    D[D == np.nan] = 0
+    return D
 
 def load_training_data():
     # Headers in training data file
@@ -35,7 +33,13 @@ def load_training_data():
 
     X = data[:, [0, 1, 2, 3, 4]]
     y = generate_y(data[:, [5, 6]])
-    X, y = remove_nans(X, y)
+
+    x_cols = X.shape[1]
+    C = np.append(X, y, axis=1)
+    C = remove_nans(C)
+    X = C[:, [0, x_cols - 1]]
+    y = C[:, [x_cols]]
+
     assert np.all(np.isfinite(X)) == True
     assert np.all(np.isfinite(y)) == True
 
