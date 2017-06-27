@@ -7,6 +7,7 @@ import numpy as np
 dir = os.path.dirname(__file__)
 training_file = os.path.join(dir, './data/train.csv')
 testing_file = os.path.join(dir, './data/prediction.csv')
+results_file = os.path.join(dir, '.results/results.txt')
 
 def generate_y(y_prime):
     y = np.zeros((y_prime.shape[0], 1))
@@ -22,41 +23,50 @@ def remove_nans(C):
     D[D == np.nan] = 0
     return D
 
-def load_training_data():
+
+def load_training_data(essential_input_cols=(1, 2, 4, 5, 6), output_cols=(7, 8)):
     # Headers in training data file
     # 0. Date, 1. Keyword_ID, 2. Ad_group_ID, 3. Campaign_ID, 4. Account_ID,
     # 5. Device_ID, 6. Match_type_ID, 7. Revenue, 8. Clicks, 9. Conversions
-    essential_input_cols = (1, 2, 4, 5, 6)
-    output_cols = (7, 8)
     all_essential_cols = essential_input_cols + output_cols
-
     data = np.genfromtxt(training_file,
                          delimiter=',',
                          skip_header=False,
                          usecols=all_essential_cols)
 
-    essential_cols_offset = [i for i in range(len(all_essential_cols))]
-    x_cols = [i for i in range(len(essential_input_cols))]
-    y_cols = essential_cols_offset[-len(output_cols):]
+    x_cols, y_cols = get_X_y_cols(all_essential_cols, essential_input_cols, output_cols)
 
-    X = data[:, x_cols]
-    y = generate_y(data[:, y_cols])
-
-    x_cols = X.shape[1]
-    C = np.append(X, y, axis=1)
-    C = remove_nans(C)
-    X = C[:, [0, x_cols - 1]]
-    y = C[:, [x_cols]]
-
-    assert np.all(np.isfinite(X)) == True
-    assert np.all(np.isfinite(y)) == True
+    X, y = get_X_y_arrays(data, x_cols, y_cols)
 
     return X, y
 
-def load_test_data():
+
+def get_X_y_arrays(data, x_cols, y_cols):
+    X = data[:, x_cols]
+    y = generate_y(data[:, y_cols])
+
+    num_X_cols = X.shape[1]
+    C = np.append(X, y, axis=1)
+    C = remove_nans(C)
+    X = C[:, [0, num_X_cols - 1]]
+    y = C[:, [num_X_cols]]
+
+    assert np.all(np.isfinite(X)) == True
+    assert np.all(np.isfinite(y)) == True
+    return X, y
+
+
+def get_X_y_cols(all_essential_cols, essential_input_cols, output_cols):
+    essential_cols_offset = [i for i in range(len(all_essential_cols))]
+    x_cols = [i for i in range(len(essential_input_cols))]
+    y_cols = essential_cols_offset[-len(output_cols):]
+    return x_cols, y_cols
+
+
+def load_test_data(essential_input_cols=(1, 2, 4, 5, 6)):
     # 0. Date, 1. Keyword_ID, 2. Ad_group_ID, 3. Campaign_ID, 4. Account_ID,
     # 5. Device_ID, 6. Match_type_ID
-    essential_input_cols = (1, 2, 4, 5, 6)
+
     X_test = np.genfromtxt(testing_file,
                            delimiter=',',
                            skip_header=False,

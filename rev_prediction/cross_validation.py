@@ -58,6 +58,7 @@ def get_trained_linear_model(X, y):
 
 
 if __name__ == '__main__':
-    X, y = load_training_data()
+    essential_input_cols = (1, 2, 4, 5, 6)
+    X, y = load_training_data(essential_input_cols)
     error_rates = cross_validate_model(X, y, chunk_size=100000)
     print(np.mean(np.array(error_rates)))
