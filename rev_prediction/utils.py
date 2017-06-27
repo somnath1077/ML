@@ -3,6 +3,7 @@
 import os
 import numpy as np
 
+from sklearn.preprocessing import OneHotEncoder
 
 dir = os.path.dirname(__file__)
 training_file = os.path.join(dir, './data/train.csv')
@@ -24,7 +25,7 @@ def remove_nans(C):
     return D
 
 
-def load_training_data(essential_input_cols=(1, 2, 4, 5, 6), output_cols=(7, 8)):
+def load_training_data(essential_input_cols=(1, 2, 4, 5, 6), output_cols=(7, 8), num_rows=20000):
     # Headers in training data file
     # 0. Date, 1. Keyword_ID, 2. Ad_group_ID, 3. Campaign_ID, 4. Account_ID,
     # 5. Device_ID, 6. Match_type_ID, 7. Revenue, 8. Clicks, 9. Conversions
@@ -38,7 +39,9 @@ def load_training_data(essential_input_cols=(1, 2, 4, 5, 6), output_cols=(7, 8))
 
     X, y = get_X_y_arrays(data, x_cols, y_cols)
 
-    return X, y
+    enc = OneHotEncoder()
+    X_trans = enc.fit_transform(X[0: num_rows])
+    return X_trans, y[0: num_rows]
 
 
 def get_X_y_arrays(data, x_cols, y_cols):

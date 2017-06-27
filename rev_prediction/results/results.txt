@@ -1,1 +1,0 @@
-(1, 2, 4, 5, 6): mean squared error: 505905.1343555303input col used (1, 2, 4, 5, 6): Mean MSE: 505905.1343555303
