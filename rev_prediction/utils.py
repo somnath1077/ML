@@ -2,8 +2,9 @@
 
 import os
 import numpy as np
+import sys
 
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder
 
 dir = os.path.dirname(__file__)
 training_file = os.path.join(dir, './data/train.csv')
@@ -35,13 +36,29 @@ def load_training_data(essential_input_cols=(1, 2, 4, 5, 6), output_cols=(7, 8),
                          skip_header=False,
                          usecols=all_essential_cols)
 
-    x_cols, y_cols = get_X_y_cols(all_essential_cols, essential_input_cols, output_cols)
-
+    x_cols, y_cols = get_X_y_cols(essential_input_cols, output_cols)
+    print("x_cols = ", x_cols)
+    print("y_cols = ", y_cols)
     X, y = get_X_y_arrays(data, x_cols, y_cols)
 
+    X_trans = transform_categorical_data(X)
+    return X_trans, y
+
+
+def transform_categorical_data(X):
+    """
+        X is a matrix of categorical features.
+        OneHotEncoder is used to encode the categorical data into
+    """
     enc = OneHotEncoder()
-    X_trans = enc.fit_transform(X[0: num_rows])
-    return X_trans, y[0: num_rows]
+    label_encoder = LabelEncoder()
+
+    print("The number of cols in X = ", X.shape[1])
+    for col in range(X.shape[1]):
+        X[:, col] = label_encoder.fit_transform(X[:, col])
+
+    X_trans = enc.fit_transform(X)
+    return X_trans
 
 
 def get_X_y_arrays(data, x_cols, y_cols):
@@ -51,7 +68,7 @@ def get_X_y_arrays(data, x_cols, y_cols):
     num_X_cols = X.shape[1]
     C = np.append(X, y, axis=1)
     C = remove_nans(C)
-    X = C[:, [0, num_X_cols - 1]]
+    X = C[:, [i for i in range(num_X_cols)]]
     y = C[:, [num_X_cols]]
 
     assert np.all(np.isfinite(X)) == True
@@ -59,7 +76,8 @@ def get_X_y_arrays(data, x_cols, y_cols):
     return X, y
 
 
-def get_X_y_cols(all_essential_cols, essential_input_cols, output_cols):
+def get_X_y_cols(essential_input_cols, output_cols):
+    all_essential_cols = essential_input_cols + output_cols
     essential_cols_offset = [i for i in range(len(all_essential_cols))]
     x_cols = [i for i in range(len(essential_input_cols))]
     y_cols = essential_cols_offset[-len(output_cols):]
