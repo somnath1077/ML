@@ -56,8 +56,9 @@ def load_training_data():
 def load_test_data():
     # 0. Date, 1. Keyword_ID, 2. Ad_group_ID, 3. Campaign_ID, 4. Account_ID,
     # 5. Device_ID, 6. Match_type_ID
+    essential_input_cols = (1, 2, 4, 5, 6)
     X_test = np.genfromtxt(testing_file,
-                         delimiter=',',
-                         skip_header=False,
-                         usecols=(1,2,4,5,6))
+                           delimiter=',',
+                           skip_header=False,
+                           usecols=essential_input_cols)
     return remove_nans(X_test)
