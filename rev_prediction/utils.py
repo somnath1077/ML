@@ -7,7 +7,7 @@ import numpy as np
 dir = os.path.dirname(__file__)
 training_file = os.path.join(dir, './data/train.csv')
 testing_file = os.path.join(dir, './data/prediction.csv')
-results_file = os.path.join(dir, '.results/results.txt')
+results_file = os.path.join(dir, './results/results.txt')
 
 def generate_y(y_prime):
     y = np.zeros((y_prime.shape[0], 1))
