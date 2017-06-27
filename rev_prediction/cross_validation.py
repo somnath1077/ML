@@ -61,6 +61,6 @@ if __name__ == '__main__':
     essential_input_cols = (1, 2, 4, 5, 6)
     X, y = load_training_data(essential_input_cols)
     error_rates = cross_validate_model(X, y, chunk_size=100000)
-    data = "input col used {}: Mean MSE: {}".format(essential_input_cols,
-                                                    np.mean(np.array(error_rates)))
+    data = "input col used {}: Mean MSE: {} \n".format(essential_input_cols,
+                                                       np.mean(np.array(error_rates)))
     write_to_file(results_file, [data], mode='a')
