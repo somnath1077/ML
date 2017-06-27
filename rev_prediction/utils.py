@@ -26,13 +26,21 @@ def load_training_data():
     # Headers in training data file
     # 0. Date, 1. Keyword_ID, 2. Ad_group_ID, 3. Campaign_ID, 4. Account_ID,
     # 5. Device_ID, 6. Match_type_ID, 7. Revenue, 8. Clicks, 9. Conversions
-    data = np.genfromtxt(training_file,
-                        delimiter=',',
-                        skip_header=False,
-                        usecols=(1,2,4,5,6,7,8))
+    essential_input_cols = (1, 2, 4, 5, 6)
+    output_cols = (7, 8)
+    all_essential_cols = essential_input_cols + output_cols
 
-    X = data[:, [0, 1, 2, 3, 4]]
-    y = generate_y(data[:, [5, 6]])
+    data = np.genfromtxt(training_file,
+                         delimiter=',',
+                         skip_header=False,
+                         usecols=all_essential_cols)
+
+    essential_cols_offset = [i for i in range(len(all_essential_cols))]
+    x_cols = [i for i in range(len(essential_input_cols))]
+    y_cols = essential_cols_offset[-len(output_cols):]
+
+    X = data[:, x_cols]
+    y = generate_y(data[:, y_cols])
 
     x_cols = X.shape[1]
     C = np.append(X, y, axis=1)

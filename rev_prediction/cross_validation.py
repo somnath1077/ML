@@ -21,7 +21,7 @@ def get_folds(num_rows, chunk_size):
     return folds
 
 
-def get_new_inputs_labels(X: np.ndarray, y: np.ndarray, val_set: Tuple(int, int)):
+def get_new_inputs_labels(X: np.ndarray, y: np.ndarray, val_set):
     """
         X: np.array of inputs
         y: np.array of labels
