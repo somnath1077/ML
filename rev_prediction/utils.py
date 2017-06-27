@@ -72,3 +72,9 @@ def load_test_data(essential_input_cols=(1, 2, 4, 5, 6)):
                            skip_header=False,
                            usecols=essential_input_cols)
     return remove_nans(X_test)
+
+
+def write_to_file(file, data, mode='wb'):
+    with open(file, mode) as f:
+        for datum in data:
+            f.write(datum)

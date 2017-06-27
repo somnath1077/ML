@@ -4,7 +4,7 @@ from sklearn import linear_model
 import numpy as np
 
 from rev_prediction.constants import LINEAR
-from rev_prediction.utils import load_training_data
+from rev_prediction.utils import load_training_data, write_to_file, results_file
 
 MODELS = {LINEAR: linear_model}
 
@@ -61,4 +61,6 @@ if __name__ == '__main__':
     essential_input_cols = (1, 2, 4, 5, 6)
     X, y = load_training_data(essential_input_cols)
     error_rates = cross_validate_model(X, y, chunk_size=100000)
-    print(np.mean(np.array(error_rates)))
+    data = "{}: mean squared error: {}".format(essential_input_cols,
+                                               np.mean(np.array(error_rates)))
+    write_to_file(results_file, [data], mode='a')
