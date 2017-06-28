@@ -26,7 +26,7 @@ def remove_nans(C):
     return D
 
 
-def load_training_data(essential_input_cols=(1, 2, 4, 5, 6), output_cols=(7, 8), num_rows=20000):
+def load_training_data(essential_input_cols=(1, 2, 4, 5, 6), output_cols=(7, 8), num_rows=200000):
     # Headers in training data file
     # 0. Date, 1. Keyword_ID, 2. Ad_group_ID, 3. Campaign_ID, 4. Account_ID,
     # 5. Device_ID, 6. Match_type_ID, 7. Revenue, 8. Clicks, 9. Conversions
@@ -41,8 +41,8 @@ def load_training_data(essential_input_cols=(1, 2, 4, 5, 6), output_cols=(7, 8),
     print("y_cols = ", y_cols)
     X, y = get_X_y_arrays(data, x_cols, y_cols)
 
-    X_trans = transform_categorical_data(X)
-    return X_trans, y
+    X_trans = transform_categorical_data(X[0: num_rows])
+    return X_trans, y[0: num_rows]
 
 
 def transform_categorical_data(X):
@@ -57,7 +57,10 @@ def transform_categorical_data(X):
     for col in range(X.shape[1]):
         X[:, col] = label_encoder.fit_transform(X[:, col])
 
+    print("The number of cols in X after label encoding = ", X.shape[1])
     X_trans = enc.fit_transform(X)
+
+    print("The shape of X after one hot encoding = ", X_trans.shape)
     return X_trans
 
 

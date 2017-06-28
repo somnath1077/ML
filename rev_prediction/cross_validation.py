@@ -43,6 +43,7 @@ def cross_validate_model(X: np.ndarray, y: np.ndarray, chunk_size: int):
     for val_set in folds:
         print("current validation set = ", val_set)
         training_inputs, training_labels = get_new_inputs_labels(X, y, val_set)
+        print("shape of training inputs: ", training_inputs.shape)
         regression_model = linear_model.LinearRegression()
         regression_model.fit(training_inputs, training_labels)
 
@@ -59,8 +60,8 @@ def get_trained_linear_model(X, y):
 
 if __name__ == '__main__':
     essential_input_cols = (1, 2, 4, 5, 6)
-    X, y = load_training_data(essential_input_cols=essential_input_cols)
-    error_rates = cross_validate_model(X, y, chunk_size=100000)
+    X, y = load_training_data(essential_input_cols=essential_input_cols, num_rows=2000)
+    error_rates = cross_validate_model(X, y, chunk_size=100)
     data = "input col used {}: Mean MSE: {} \n".format(essential_input_cols,
                                                        np.mean(np.array(error_rates)))
     write_to_file(results_file, [data], mode='a')
