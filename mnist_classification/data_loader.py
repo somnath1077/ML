@@ -13,7 +13,7 @@ train_data_filename = os.path.join(data_dir, 'train-images-idx3-ubyte.gz')
 train_labels_filename = os.path.join(data_dir, 'train-labels-idx1-ubyte.gz')
 test_data_filename = os.path.join(data_dir, 't10k-images-idx3-ubyte.gz')
 test_labels_filename = os.path.join(data_dir, 't10k-labels-idx1-ubyte.gz')
-
+report_filename = os.path.join(dir, 'report.txt')
 
 def extract_data(filename, num_images):
     """Extract the images into a 2D matrix [image index, y * x].
@@ -49,6 +49,12 @@ def load_test_data():
     test_labels = extract_labels(test_labels_filename, 10000)
     return test_data, test_labels
 
+
+def append_report_file(data):
+    with open(report_filename, 'a') as f:
+        for datum in data:
+            f.write(datum)
+        f.write("\n")
 
 if __name__ == '__main__':
     X, y = load_training_data()
