@@ -4,7 +4,7 @@ from mnist_classification.train_predict import train_model, predict
 
 train_data, train_labels = load_training_data()
 test_data, test_labels = load_test_data()
-HIDDEN_LAYER_CONFIG = [(10,)]
+HIDDEN_LAYER_CONFIG = [(400, 200, 100, 10), (400, 300, 100, 10)]
 
 for hidden_layer in HIDDEN_LAYER_CONFIG:
     classifier = train_model(train_data, train_labels, hidden_layer_size=hidden_layer)
