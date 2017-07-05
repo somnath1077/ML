@@ -50,10 +50,14 @@ def load_test_data():
     return test_data, test_labels
 
 
-def append_report_file(data):
+def append_report_file(data, *args):
     with open(report_filename, 'a') as f:
+        for arg in args:
+            f.write(str(arg))
+
         for datum in data:
             f.write(datum)
+
         f.write("\n")
 
 if __name__ == '__main__':
