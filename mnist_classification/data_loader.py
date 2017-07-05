@@ -40,14 +40,12 @@ def extract_labels(filename, num_images):
 
 def load_training_data():
     train_data = extract_data(train_data_filename, 60000)
-    # train_data = np.reshape(train_data, (60000, 784))
     train_labels = extract_labels(train_labels_filename, 60000)
     return train_data, train_labels
 
 
 def load_test_data():
     test_data = extract_data(test_data_filename, 10000)
-    # test_data = np.reshape(test_data, (10000, 784))
     test_labels = extract_labels(test_labels_filename, 10000)
     return test_data, test_labels
 
