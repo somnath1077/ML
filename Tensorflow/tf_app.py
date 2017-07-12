@@ -1,3 +1,5 @@
+# pip install --ignore-installed --upgrade tensorflow-1.2.1-cp35-cp35m-linux_x86_64.whl
+
 import tensorflow as tf
 
 node1 = tf.constant(3.0, dtype=tf.float32)
