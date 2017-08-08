@@ -25,11 +25,6 @@ def get_session():
     session = tf.Session()
     return session
 
-def initialize_vars(session, model_vars):
-    init = tf.initialize_variables(list(model_vars.values()))
-    session.run(init)
-    return session
-
 def create_loss_function(y, y_actual):
     cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y_actual,
                                                                             logits=y))
@@ -37,8 +32,12 @@ def create_loss_function(y, y_actual):
 
 def train_model_and_evaluate(model_vars, loss_function, mnist, session):
     train_step = tf.train.GradientDescentOptimizer(0.05).minimize(loss_function)
-    # .update({'loss_function': loss_function, 'train_step': train_step})
-    initialize_vars(session, model_vars.update({'loss_function': loss_function, 'train_step': train_step}))
+
+    model_vars['loss_function'] = loss_function
+    model_vars['train_step'] = train_step
+
+    init = tf.global_variables_initializer()
+    session.run(init)
 
     x = model_vars['x']
     y = model_vars['y']
