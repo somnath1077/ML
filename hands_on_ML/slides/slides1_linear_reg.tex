@@ -328,6 +328,8 @@ This linear formula $g \in \cal{H}$ can be written as :
     g(\vect{x}) = \sign \left (\sum_{i=1}^{n} w_i x_i + w_0\right )
 \]
 
+\pause
+
 Introduce an artificial coordinate $x_0 = 1$:
 \[
      g(\vect{x}) = \sign \sum_{i=0}^{n} w_i x_i = \sign(\trans{\vect{w}} \cdot \vect{x})
@@ -340,6 +342,31 @@ Introduce an artificial coordinate $x_0 = 1$:
 \end{center}
 \end{frame}
 
+\begin{frame}[t]
+\frametitle{The Perceptron Learning Algorithm}
+The perceptron implements 
+\[g(\vect{x}) = \sign(\trans{\vect{w}} \cdot \vect{x})\]
+
+\parbox[t]{5cm}{
+Given a training set: 
+\[(\vect{x}^{(1)}, y^{(1)}), (\vect{x}^{(2)}, y^{(2)}), \ldots, (\vect{x}^{(m)},
+y^{(m)})\]
+pick a \textbf{misclassified} point:
+\[
+    \sign (\trans{\vect{w}} \vect{x}^{(k)}) \neq y^{(k)}
+\]
+and update the weight vector:
+\[
+    \vect{w}_{\text{new}} \leftarrow \vect{w}_{\text{old}} + y^{(k)} \vect{x}^{(k)}
+\]
+} 
+\hfill
+\parbox[t]{5cm}{
+\begin{center}
+    \includegraphics[scale=0.2]{PLA.png}
+\end{center}
+}
+\end{frame}
 
 \begin{frame}[t]
 \frametitle{Types of Learning}
