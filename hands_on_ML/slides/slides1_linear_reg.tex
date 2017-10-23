@@ -8,6 +8,7 @@
 \usepackage{listliketab}
 \usepackage[table]{xcolor}
 \usepackage{booktabs}
+\usepackage{amsmath}
 
 \usepackage{pgf}
 \usepackage{tikz}
@@ -140,9 +141,10 @@
 
 %% User defined commands
 \newcommand{\vect}[1]{\ensuremath{\mathbf{#1}}}
+\newcommand{\trans}[1]{\ensuremath{#1}^{\footnotesize{\textsf{T}}}}
 \newcommand{\calX}{\ensuremath{{\cal X}}}
 \newcommand{\calY}{\ensuremath{{\cal Y}}}
-
+\DeclareMathOperator{\sign}{sign}
 
 
 \title{Machine Learning}
@@ -296,6 +298,45 @@ Neural Networks & Back Propagation \\
 SVM & Quadratic Programming \\
 Mixture of Gaussians Model & EM Algorithm \\
 \end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{The Perceptron: A Simple Hypothesis Set}
+For input $\vect{x} = (x_1, \ldots, x_n)$, the customer attributes,
+\begin{align*}
+\text{Approve credit if } & \sum_{i = 1}^{n} w_i x_i >    \text{ threshold} \\
+\text{Deny credit if }    & \sum_{i = 1}^{n} w_i x_i \leq \text{ threshold}. \\
+\end{align*}
+
+This linear formula $g \in \cal{H}$ can be written as :
+\[
+    g(\vect{x}) = \sign \left (\sum_{i=1}^{n} w_i x_i - \text{ threshold} \right )
+\]
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{The Perceptron: A Simple Hypothesis Set}
+\[
+    g(\vect{x}) = \sign \left (\sum_{i=1}^{n} w_i x_i - \text{ threshold} \right )
+\]
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{The Perceptron: A Simple Hypothesis Set}
+\[
+    g(\vect{x}) = \sign \left (\sum_{i=1}^{n} w_i x_i + w_0\right )
+\]
+
+Introduce an artificial coordinate $x_0 = 1$:
+\[
+     g(\vect{x}) = \sign \sum_{i=0}^{n} w_i x_i = \sign(\trans{\vect{w}} \cdot \vect{x})
+\]
+
+\pause
+
+\begin{center}
+    \includegraphics[scale=0.25]{linearly_separable_data.png}
 \end{center}
 \end{frame}
 
