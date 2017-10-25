@@ -145,6 +145,7 @@
 \newcommand{\calX}{\ensuremath{{\cal X}}}
 \newcommand{\calY}{\ensuremath{{\cal Y}}}
 \DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\RSS}{RSS}
 
 %\newtheorem{theorem}{Theorem}
 \title{Linear Regression}
@@ -164,6 +165,40 @@
         problem. 
   \end{itemize}
 \end{frame}
+
+
+\begin{frame}[t]
+\frametitle{Linear Regression Models and Least Squares}
+\begin{itemize}
+    \item input vector $\trans{x} = (x_1, \ldots, x_n)$, output/response $y$
+    \item linear model: $y = \theta_0 + \sum_{j=1}^{n} x_j \theta_j = \sum_{j = 0}^n
+    x_j \theta_j$, where $x_0 = 1$
+    \item $\theta$s are unknown parameters
+    \item variables $x_j$ can come from different sources:
+        \begin{itemize}
+            \item quantitative inputs
+            \item transformations of quantitative inputs: $\log$, $\sqrt{~}$ etc
+            \item basis functions: $x_2 = x_1^2$, $x_3 = x_1^3$
+            \item numeric encoding of the levels of qualitative inputs
+            \item interactions between variables $x_3 = x_1 \cdot x_2$
+        \end{itemize}
+\end{itemize}
+The model is \textbf{linear in the parameters $\theta$}.
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Linear Regression Models and Least Squares~$\ldots$}
+\begin{itemize}
+    \item Typical situation: we have training data 
+    \[(x^{(1)}, y^{(1)}), \ldots, (x^{(m)}, y^{(m)})\] 
+    from which to estimate the parameters $\theta$.
+    
+    \item Least squares: pick parameters $\theta = \trans{(\theta_0, \ldots, \theta_n)}$ to minimize 
+    \[\RSS(\theta) = \sum_{i = 1}^{m} \left (y^{(i)} - \sum_{j = 0}^{n} x^{(i)}_j \theta_j \right )^2\]   
+\end{itemize}
+\end{frame}
+
+
 
 \begin{frame}[t]
 \frametitle{Predicting House Prices}
