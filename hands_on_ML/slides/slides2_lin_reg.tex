@@ -194,11 +194,94 @@ The model is \textbf{linear in the parameters $\theta$}.
     from which to estimate the parameters $\theta$.
     
     \item Least squares: pick parameters $\theta = \trans{(\theta_0, \ldots, \theta_n)}$ to minimize 
-    \[\RSS(\theta) = \sum_{i = 1}^{m} \left (y^{(i)} - \sum_{j = 0}^{n} x^{(i)}_j \theta_j \right )^2\]   
+    \[J(\theta) = 
+    \frac{1}{2} \sum_{i = 1}^{m} \left (y^{(i)} - \sum_{j = 0}^{n} x^{(i)}_j \theta_j \right )^2\]   
+\end{itemize}
+
+\pause
+
+\begin{itemize}
+    \item Gradient descent
+    \item Analytical solution
+    \item Probabilistic interpretation
 \end{itemize}
 \end{frame}
 
+\begin{frame}[t]
+\frametitle{Gradient Descent}
+\begin{itemize}
+    \item Start with an ``initial guess'' for $\theta$
 
+    \pause
+
+    \item Repeatedly perform the update for all $0 \leq j \leq n$:
+    \[
+        \theta_j := \theta_j - \alpha \frac{\partial}{\partial \theta_j} J(\theta),
+    \]
+    where $\alpha$ is the learning rate.
+
+    \pause 
+
+    \item For each $0 \leq j \leq n$:
+    $
+        \partial J(\theta)/ \partial \theta_j = - \sum_{i = 1}^m 
+        \left ( y^{(i)} - \sum_{j = 0}^n x_j^{(i)} \theta_j \right ) \cdot x_j^{(i)}.
+    $
+    
+    \pause
+
+    \item Magnitude of update: a linear function of the input vectors, where the
+    coefficients are the error terms $y - \sum_j x_j \theta_j$
+
+    \pause
+
+    \item Looks at every input in the training set before making an update: \pause
+    \textbf{batch gradient descent}
+    
+    \pause
+
+    \item Gradient descent is susepctible to \textbf{local minima} in general; in
+    this case, $J$ is a \textbf{convex} function and has a \textbf{unique global
+    minimum}.  
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Stochastic Gradient Descent}
+In batch gradient descent, the update step for the $j$th component is:
+\[
+    \theta_j := \theta_j  + \alpha \cdot \sum_{i = 1}^m 
+        \left ( y^{(i)} - \sum_{j = 0}^n x_j^{(i)} \theta_j \right ) \cdot x_j^{(i)}.
+\]
+
+\begin{itemize}
+    \item Has to scan through the entire training set for a \emph{single} update
+    
+    \item Costly operation if $m$ is large
+    
+    \pause
+
+    \item \textbf{Stochastic Gradient Descent}: for every training instance $(x, y)$, 
+    $x = \trans{(x_0, x_1, \ldots, x_n)}$, update the parameters:
+    \[
+         \theta_j := \theta_j  + \alpha \cdot \left ( y - \sum_{j = 0}^n x_j 
+         \theta_j \right ) \cdot x_j.
+    \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Stochastic Gradient Descent: Features and Issues}
+\begin{itemize}
+    \item Doesn't have to look at the entire training set to make progress.
+
+    \item Often gets close to the optimum much faster than batch gradient descent.
+
+    \item May never converge to the optimum (can keep on oscillating between values 
+    near the optimum). This problem is alleviated by choosing $\alpha$ to be very
+    small.
+\end{itemize}
+\end{frame}
 
 \begin{frame}[t]
 \frametitle{Predicting House Prices}
