@@ -284,6 +284,13 @@ In batch gradient descent, the update step for the $j$th component is:
 \end{frame}
 
 \begin{frame}[t]
+\frametitle{Analytic Solution}
+\[J(\theta) = 
+    \frac{1}{2} \sum_{i = 1}^{m} \left (y^{(i)} - \sum_{j = 0}^{n} x^{(i)}_j \theta_j \right )^2\]  
+Want to find in closed-form a value of $\theta$ that minimizes $J(\theta)$ 
+\end{frame}
+
+\begin{frame}[t]
 \frametitle{Predicting House Prices}
 \begin{center}
     \includegraphics[scale=0.2]{housing_data.png}
