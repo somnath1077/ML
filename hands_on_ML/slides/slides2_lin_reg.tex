@@ -148,6 +148,7 @@
 \DeclareMathOperator{\sign}{sign}
 \DeclareMathOperator{\RSS}{RSS}
 \DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\RSE}{RSE}
 
 %\newtheorem{theorem}{Theorem}
 \title{Linear Regression}
@@ -460,6 +461,29 @@ corresponds to finding the \textbf{maximum likelihood estimate} of $\theta$.
 
 \begin{frame}[t]
 \frametitle{The Goodness of Fit}
+\begin{itemize}
+    \item Residual Standard Error: standard deviation of the error terms $\epsilon^{(i)}$.
+    \[
+        \RSE = \sqrt{\frac{1}{n - 2} \sum_{i = 1}^{m} \left ( y^{(i)} - \hat{y}^{(i)} \right )^2}
+    \]
+
+    \pause
+
+    \item $R^2$ Statistic: 
+    \[
+        R^2 = 1 - \frac{ \sum_{i = 1}^{m} \left ( y^{(i)} - \hat{y}^{(i)} \right )^2}{ \sum_{i = 1}^{m} \left ( y^{(i)} - \bar{y} \right )^2}
+    \]
+\end{itemize}
+
+\pause
+
+\begin{itemize}
+    \item Total sum of squares = $\sum_{i = 1}^{m} \left ( y^{(i)} - \bar{y} \right )^2$: variability 
+        inherent in the response  
+    
+    \item Residual sum of squares = $\left ( y^{(i)} - \hat{y}^{(i)} \right )^2$: variability left 
+        unexplained after performing the regression  
+\end{itemize}
 \end{frame}
 
 \begin{frame}[t]
