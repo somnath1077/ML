@@ -141,7 +141,7 @@
 
 %% User defined commands
 \newcommand{\vect}[1]{\ensuremath{\mathbf{#1}}}
-\newcommand{\trans}[1]{\ensuremath{#1}^{\footnotesize{\textsf{T}}}}
+\newcommand{\trans}[1]{\ensuremath{#1}^{\scriptsize{\textsf{T}}}}
 \newcommand{\calX}{\ensuremath{{\cal X}}}
 \newcommand{\calY}{\ensuremath{{\cal Y}}}
 \DeclareMathOperator{\sign}{sign}
@@ -288,6 +288,77 @@ In batch gradient descent, the update step for the $j$th component is:
 \[J(\theta) = 
     \frac{1}{2} \sum_{i = 1}^{m} \left (y^{(i)} - \sum_{j = 0}^{n} x^{(i)}_j \theta_j \right )^2\]  
 Want to find in closed-form a value of $\theta$ that minimizes $J(\theta)$ 
+
+\begin{itemize}
+    \item Write $J(\theta)$ is matrix-vectorial form.
+    
+    \pause
+
+    \item \textbf{Design matrix.} An $m \times (n + 1)$ matrix $X$ defined by:
+    \[
+        X = \left [ \begin{array}{ccc}
+                        \hbox{---} & \trans{(x^{(1)})} & \hbox{---} \\
+                        \hbox{---} & \trans{(x^{(2)})} & \hbox{---} \\
+                        \vdots     & \vdots                   & \vdots     \\
+                        \hbox{---} & \trans{(x^{(m)})} & \hbox{---} \\
+                   \end{array}
+            \right ]
+    \]
+
+    \pause
+
+    \item $y = \trans{(y^{(1)}, \ldots, y^{(m)})}$
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Analytic Solution $\ldots$}
+\[y - X \cdot \theta =  \left [ \begin{array}{c} 
+                                    y^{(1)} \\
+                                    y^{(2)} \\
+                                    \vdots \\
+                                    y^{(m)}
+                                \end{array}\right ] -
+                        \left [ \begin{array}{c}
+                                    \trans{(x^{(1)})} \cdot \theta \\
+                                    \trans{(x^{(2)})} \cdot \theta \\
+                                    \vdots                         \\
+                                    \trans{(x^{(m)})} \cdot \theta \\
+                                \end{array}
+                       \right ]\]
+Maxtrix-form of $J(\theta)$:
+\begin{equation*}
+\begin{split}
+    J(\theta) & = \frac{1}{2} \sum_{i = 1}^{m} \left (y^{(i)} - \sum_{j = 0}^{n} 
+                    x^{(i)}_j \theta_j \right )^2 \\
+              & = \frac{1}{2} \trans{(y - X \theta)} (y - X \theta)
+\end{split}
+\end{equation*}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Analytic Solution $\ldots$}
+Minimize $J(\theta)$ wrt $\theta$:
+\begin{equation*}
+\begin{split}
+    \nabla_{\theta} J(\theta) & = \nabla_{\theta} \frac{1}{2} \trans{(y - X \theta)} (y - X \theta) \\
+                              & = \text{see Andrew Ng's notes} \\
+                              & = \trans{X} X \theta - \trans{X} y  
+\end{split}
+\end{equation*}
+yielding: 
+\[\boxed{\theta = (\trans{X} X)^{-1} \cdot \trans{X}y.}\] 
+
+\pause
+
+\begin{itemize}
+    \item \textbf{Assumption:} $X$ has full column rank so that $\trans{X}X$ is invertible. \pause
+    \emph{Proof.} Show that $\trans{X} X z = 0$ implies $z = 0$. 
+
+    \pause
+
+    \item If $X$ does not have full column rank, the usual strategy is to remove redundant columns.   
+\end{itemize}
 \end{frame}
 
 \begin{frame}[t]
