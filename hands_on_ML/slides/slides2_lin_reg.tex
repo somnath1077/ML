@@ -242,7 +242,7 @@ The model is \textbf{linear in the parameters $\theta$}.
     
     \pause
 
-    \item Gradient descent is susepctible to \textbf{local minima} in general; in
+    \item Gradient descent is susceptible to \textbf{local minima} in general; in
     this case, $J$ is a \textbf{convex} function and has a \textbf{unique global
     minimum}.  
 \end{itemize}
@@ -292,7 +292,7 @@ In batch gradient descent, the update step for the $j$th component is:
 Want to find in closed-form a value of $\theta$ that minimizes $J(\theta)$ 
 
 \begin{itemize}
-    \item Write $J(\theta)$ is matrix-vectorial form.
+    \item Write $J(\theta)$ is matrix-vector form.
     
     \pause
 
@@ -328,7 +328,7 @@ Want to find in closed-form a value of $\theta$ that minimizes $J(\theta)$
                                     \trans{(x^{(m)})} \cdot \theta \\
                                 \end{array}
                        \right ]\]
-Maxtrix-form of $J(\theta)$:
+Matrix-form of $J(\theta)$:
 \begin{equation*}
 \begin{split}
     J(\theta) & = \frac{1}{2} \sum_{i = 1}^{m} \left (y^{(i)} - \sum_{j = 0}^{n} 
@@ -340,7 +340,7 @@ Maxtrix-form of $J(\theta)$:
 
 \begin{frame}[t]
 \frametitle{Analytic Solution $\ldots$}
-Minimize $J(\theta)$ wrt $\theta$:
+Minimize $J(\theta)$ w.r.t $\theta$:
 \begin{equation*}
 \begin{split}
     \nabla_{\theta} J(\theta) & = \nabla_{\theta} \frac{1}{2} \trans{(y - X \theta)} (y - X \theta) \\
@@ -395,248 +395,77 @@ Given $x^{(i)}$,
 
 Thus $y^{(i)} \mid x^{(i)} \thicksim N(\trans{\theta} x^{(i)}, \sigma^2)$:
 \[
-    p(y^{(i)} \mid x^{(i)}) = \frac{1}{\sqrt{2 \pi} \sigma} 
+    p(y^{(i)} \mid x^{(i)} ; \theta ) = \frac{1}{\sqrt{2 \pi} \sigma} 
                         \exp{\left ( - \frac{(y^{(i)} - \trans{\theta} \cdot x^{(i)})^2}{2 \sigma^2}\right )}
 \]
 \end{frame}
 
 \begin{frame}[t]
 \frametitle{Maximum Likelihood Estimation}
+\begin{itemize}
+    \item Given $x = \trans{(x^{(1)}, \ldots, x^{(m)})}$ and $\theta$, what is the joint distribution of 
+            the $y = \trans{(y^{(1)}, \ldots, y^{(m)})}$? 
+
+    \pause
+    
+    \item Since the $\epsilon^{(i)}$s are independent: \pause 
+        \[
+            p(y \mid x ; \theta) = \prod_{i = 1}^{m} p(y^{(i)} \mid x^{(i)} ; \theta)
+        \]
+
+    \pause
+
+    \item \textbf{Likelihood function.} $L(\theta) = p(y \mid x ; \theta)$ 
+
+    \pause
+        
+    \[
+        L(\theta) = \prod_{i = 1}^{m} \frac{1}{\sqrt{2 \pi} \sigma} 
+            \exp{\left \{ - \frac{\left ( y^{(i)} - \trans{\theta} x^{(i)} \right ) ^2}{2 \sigma^2} \right \}}
+    \]
+    
+    \pause
+
+    \item \textbf{Principle of Maximum Likelihood.} Choose the parameters to make the data as likely 
+        as possible. Choose $\theta$ to maximize $L(\theta)$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Maximum Likelihood Estimation $\ldots$}
+Maximizing $L(\theta)$ is equivalent to maximizing \emph{any} strictly increasing 
+function of $L(\theta)$.
+
+\pause
+
+\begin{itemize}
+    \item Usual to maximize the log likelihood $l(\theta) = \log L(\theta)$.
+
+    \item $l(\theta) = m \log \frac{1}{\sqrt{2 \pi} \sigma} - 
+                        \frac{1}{\sigma^2} \cdot \frac{1}{2} 
+                            \sum_{i = 1}^{m}{\left ( y^{(i)} - \trans{\theta} x^{(i)} \right ) ^2}$.
+    \item Maximizing $l(\theta)$ is equivalent to minimizing 
+        $\frac{1}{2} \sum_{i = 1}^{m}{\left ( y^{(i)} - \trans{\theta} x^{(i)} \right ) ^2}$.
+\end{itemize} 
+
+\pause
+
+\bigskip
+
+\begin{block}{Summary}
+Under the previous probabilistic assumptions: least-squares regression corresponds to finding the 
+maximum likelihood estimate of $\theta$.
+\end{block}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{The Goodness of Fit}
 \end{frame}
 
 \begin{frame}[t]
 \frametitle{Predicting House Prices}
 \begin{center}
     \includegraphics[scale=0.2]{housing_data.png}
-\end{center}
-\end{frame}
-
-\begin{frame}[t]
-\frametitle{Examples of Machine Learning}
-\textcolor{orange2}{\textbf{Movie Ratings}}
-
-Predict how a user would rate a movie.
-
-\pause
-
-\medskip
-
-Each user is modelled as a vector of attributes:
-\begin{itemize}
-    \item likes comedy?  
-    \item likes block-busters?
-    \item likes sci-fi?
-    \item likes a specific actor?
-    \item $\ldots$
-\end{itemize}
-
-\pause
-
-How would the user rate a given movie on a scale from $1$ to $10$?
-
-\bigskip
-
-\textbf{Data}
-\begin{itemize}
-    \item Data on how other users rated the given movie. 
-\end{itemize}
-\end{frame}
-
-
-\begin{frame}[t]
-\frametitle{Components of the Learning Problem}
-
-\textbf{Formalization}
-
-\begin{itemize}
-    \item \textbf{Input:} $\vect{x}$ (applicant information)
-
-    \pause
-
-    \item \textbf{Output:} $y$ (good/bad customer)
-    
-    \pause
-
-    \item \textbf{Target function:} $f \colon \calX \rightarrow \calY$ (ideal credit
-    approval formula)
-    
-    \pause
-
-    \item \textbf{Data:} $(\vect{x}^{(1)}, y^{(1)}), \ldots, (\vect{x}^{(m)},
-    y^{(m)})$ (historical records)
-    
-    \pause
-
-    \item \textbf{Hypothesis:} $h \colon \calX \rightarrow \calY$ (formula to be used)
-\end{itemize} 
-\end{frame}
-
-\begin{frame}[t]
-\frametitle{The Learning Problem}
-\begin{center}
-\includegraphics[scale=0.25]{the_learning_problem.png}
-\end{center}
-\end{frame}
-
-\begin{frame}[t]
-\frametitle{Solution Components}
-Two solution components:
-\begin{itemize}
-    \item The Hypothesis Set $\cal{H}$
-    \item The Learning Algorithm
-\end{itemize}
-
-Together, they are referred to as the \textbf{learning model}.
-
-\pause
-
-\bigskip
-
-Why specify a hypothesis set?
-\begin{itemize}
-    \item This is what is generally done: you choose a linear model, 
-    or an SVM or a neural network
-
-    \item Important for developing a theory of learning 
-\end{itemize}
-\end{frame}
-
-\begin{frame}[t]
-\frametitle{Hypotheses Sets and Learning Algorithms}
-\textbf{Examples}
-
-\begin{center}
-\begin{tabular}{ll}
-\emph{Hypothesis Set} & \emph{Learning Algorithm} \\ \hline
-Linear Regression & Gradient Descent \\
-Neural Networks & Back Propagation \\
-SVM & Quadratic Programming \\
-Mixture of Gaussians Model & EM Algorithm \\
-\end{tabular}
-\end{center}
-\end{frame}
-
-\begin{frame}[t]
-\frametitle{The Perceptron: A Simple Hypothesis Set}
-For input $\vect{x} = (x_1, \ldots, x_n)$, the customer attributes,
-\begin{align*}
-\text{Approve credit if } & \sum_{i = 1}^{n} w_i x_i >    \text{ threshold} \\
-\text{Deny credit if }    & \sum_{i = 1}^{n} w_i x_i \leq \text{ threshold}. \\
-\end{align*}
-
-This linear formula $g \in \cal{H}$ can be written as :
-\[
-    g(\vect{x}) = \sign \left (\sum_{i=1}^{n} w_i x_i - \text{ threshold} \right )
-\]
-\end{frame}
-
-\begin{frame}[t]
-\frametitle{The Perceptron: A Simple Hypothesis Set}
-\[
-    g(\vect{x}) = \sign \left (\sum_{i=1}^{n} w_i x_i - \text{ threshold} \right )
-\]
-\end{frame}
-
-\begin{frame}[t]
-\frametitle{The Perceptron: A Simple Hypothesis Set}
-\[
-    g(\vect{x}) = \sign \left (\sum_{i=1}^{n} w_i x_i + w_0\right )
-\]
-
-\pause
-
-Introduce an artificial coordinate $x_0 = 1$:
-\[
-     g(\vect{x}) = \sign \sum_{i=0}^{n} w_i x_i = \sign(\trans{\vect{w}} \cdot \vect{x})
-\]
-
-\pause
-
-\begin{center}
-    \includegraphics[scale=0.25]{linearly_separable_data.png}
-\end{center}
-\end{frame}
-
-\begin{frame}[t]
-\frametitle{The Perceptron Learning Algorithm (PLA)}
-The perceptron implements 
-\[g(\vect{x}) = \sign(\trans{\vect{w}} \cdot \vect{x})\]
-
-\parbox[t]{5cm}{
-Given a training set: 
-\[(\vect{x}^{(1)}, y^{(1)}), (\vect{x}^{(2)}, y^{(2)}), \ldots, (\vect{x}^{(m)},
-y^{(m)})\]
-pick a \textbf{misclassified} point:
-\[
-    \sign (\trans{\vect{w}} \vect{x}^{(k)}) \neq y^{(k)}
-\]
-and update the weight vector:
-\[
-    \vect{w}_{\text{new}} \leftarrow \vect{w}_{\text{old}} + y^{(k)} \vect{x}^{(k)}
-\]
-} 
-\hfill
-\parbox[t]{5cm}{
-\begin{center}
-    \includegraphics[scale=0.20]{PLA.png}
-\end{center}
-}
-\end{frame}
-
-\begin{frame}[t]
-\frametitle{Iterations of PLA}
-\parbox[t]{7cm}{
-    \begin{itemize}
-        \item One iteration of the PLA:
-            \[ \vect{w}_{\text{new}} \leftarrow \vect{w}_{\text{old}} + y \vect{x}\]
-        where $(\vect{x}, y)$ is a misclassified point.
-
-        \item On iteration $i = 1, 2, 3, \ldots$, pick a misclassified point from 
-            \[(\vect{x}^{(1)}, y^{(1)}), (\vect{x}^{(2)}, y^{(2)}), \ldots,
-            (\vect{x}^{(m)}, y^{(m)})\]
-        and run a PLA iteration on it. 
-    \end{itemize}
-}
-\hfill
-\parbox[t]{4cm}{
-\begin{center}
-    \includegraphics[scale=0.20]{PLA_iterations.png}
-\end{center}
-}
-
-\begin{theorem}[Convergence]
-If the data is linearly separable then the PLA will find a set of weights $\vect{w}$
-that correctly classifies the training examples in a finite number of steps. 
-\end{theorem}
-\end{frame}
-
-\begin{frame}[t]
-\frametitle{Types of Learning}
-\begin{itemize}
-    \item Supervised Learning
-    \item Unsupervised Learning
-    \item Reinforced Learning 
-\end{itemize}
-\end{frame}
-
-\begin{frame}[t]
-\frametitle{Supervised Learning}
-\begin{center}
-\includegraphics[scale=0.22]{supervised_learning.png}
-\end{center}
-\end{frame}
-
-\begin{frame}[t]
-\frametitle{Unsupervised Learning}
-\begin{center}
-\includegraphics[scale=0.22]{unsupervised_learning.png}
-\end{center}
-\end{frame}
-
-\begin{frame}[t]
-\frametitle{Reinforced Learning}
-\begin{center}
-\includegraphics[scale=0.22]{reinforced_learning.png}
 \end{center}
 \end{frame}
 
