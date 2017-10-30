@@ -9,6 +9,7 @@
 \usepackage[table]{xcolor}
 \usepackage{booktabs}
 \usepackage{amsmath}
+\usepackage{amssymb}
 
 \usepackage{pgf}
 \usepackage{tikz}
@@ -146,6 +147,7 @@
 \newcommand{\calY}{\ensuremath{{\cal Y}}}
 \DeclareMathOperator{\sign}{sign}
 \DeclareMathOperator{\RSS}{RSS}
+\DeclareMathOperator{\Var}{Var}
 
 %\newtheorem{theorem}{Theorem}
 \title{Linear Regression}
@@ -359,6 +361,47 @@ yielding:
 
     \item If $X$ does not have full column rank, the usual strategy is to remove redundant columns.   
 \end{itemize}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Probabilistic Interpretation}
+\textbf{Assumptions}
+\[
+    y^{(i)} = \trans{\theta} \cdot x^{(i)} + \epsilon^{(i)},  
+\]
+where the error terms $\epsilon^{(i)}$
+\begin{itemize}
+    \item capture unmodeled effects and/or random noise
+
+    \item are independent and identically distributed as $N(0, \sigma^2)$ 
+\end{itemize}
+
+\pause
+
+\medskip
+
+Given $x^{(i)}$, 
+\begin{itemize}
+    \item $E(y^{(i)} \mid x^{(i)}) = \trans{\theta} \cdot x^{(i)}$
+    
+    \pause
+
+    \item $\Var(y^{(i)} \mid x^{(i)}) = \Var(\epsilon^{(i)}) = \sigma^{2}$
+\end{itemize}
+
+\pause
+
+\medskip
+
+Thus $y^{(i)} \mid x^{(i)} \thicksim N(\trans{\theta} x^{(i)}, \sigma^2)$:
+\[
+    p(y^{(i)} \mid x^{(i)}) = \frac{1}{\sqrt{2 \pi} \sigma} 
+                        \exp{\left ( - \frac{(y^{(i)} - \trans{\theta} \cdot x^{(i)})^2}{2 \sigma^2}\right )}
+\]
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Maximum Likelihood Estimation}
 \end{frame}
 
 \begin{frame}[t]
