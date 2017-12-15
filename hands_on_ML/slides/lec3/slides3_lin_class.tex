@@ -151,42 +151,31 @@
 \DeclareMathOperator{\RSE}{RSE}
 
 %\newtheorem{theorem}{Theorem}
-\title{Linear Regression}
+\title{Classification}
 \begin{document}
 
 \maketitle
 
 \begin{frame}[t]
-  \frametitle{Linear Regression}  
+  \frametitle{Classification}  
 \begin{itemize}
-    \item Simple approach to supervised learning when the target variable is 
-        \textbf{continuous}.
-    \item Assumes a linear relationship between the input variables 
-        $x_1, \ldots, x_n$ and the target variable $y$.
-    \item  When the target variable is discrete, the problem is a
-    \textbf{classification}
-        problem. 
+    \item Linear regression: the response variable $y$ is quantitative.
+    \item Classification: $y$ is qualitative (takes on a number of discrete values).
+    \item Classification problems seem to occur more often than regression problems:
+		\begin{itemize}    
+    		\item spam classifiers (spam or ham)
+    		\item classifying whether a bank transaction is fradulent or not
+    		\item given a set of symptoms, determining which medical condition a person has
+    		\item classifying whether a video is suitable or unsuitable for children
+    		\item MNIST: given a handwritten digit, determine which digit it actually is
+    	\end{itemize} 
   \end{itemize}
 \end{frame}
 
 
 \begin{frame}[t]
-\frametitle{Linear Regression Models and Least Squares}
-\begin{itemize}
-    \item input vector $\trans{x} = (x_1, \ldots, x_n)$, output/response $y$
-    \item linear model: $y = \theta_0 + \sum_{j=1}^{n} x_j \theta_j = \sum_{j = 0}^n
-    x_j \theta_j$, where $x_0 = 1$
-    \item $\theta$s are unknown parameters
-    \item variables $x_j$ can come from different sources:
-        \begin{itemize}
-            \item quantitative inputs
-            \item transformations of quantitative inputs: $\log$, $\sqrt{~}$ etc
-            \item basis functions: $x_2 = x_1^2$, $x_3 = x_1^3$
-            \item numeric encoding of the levels of qualitative inputs
-            \item interactions between variables $x_3 = x_1 \cdot x_2$
-        \end{itemize}
-\end{itemize}
-The model is \textbf{linear in the parameters $\theta$}.
+\frametitle{Why not Linear Regression?}
+Consider the following problem: given the bank balance $x$ of an individual, determine whether they are credit worthy or not.
 \end{frame}
 
 \begin{frame}[t]
@@ -486,11 +475,5 @@ corresponds to finding the \textbf{maximum likelihood estimate} of $\theta$.
 \end{itemize}
 \end{frame}
 
-\begin{frame}[t]
-\frametitle{Predicting House Prices}
-\begin{center}
-    \includegraphics[scale=0.2]{housing_data.png}
-\end{center}
-\end{frame}
 
 \end{document}
