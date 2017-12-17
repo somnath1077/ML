@@ -10,6 +10,7 @@
 \usepackage{booktabs}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{eurosym}
 
 \usepackage{pgf}
 \usepackage{tikz}
@@ -175,7 +176,32 @@
 
 \begin{frame}[t]
 \frametitle{Why not Linear Regression?}
-Consider the following problem: given the bank balance $x$ of an individual, determine whether they are credit worthy or not.
+\textbf{Example 1}
+
+Consider the following (simplified) problem: given the bank balance $x$ of an individual, determine whether they are credit worthy or not.
+\includegraphics[scale=0.3]{bb_cw1.png}
+\includegraphics[scale=0.3]{lin_reg_bb_cw1.png}
+
+\begin{itemize}
+	\item Turns out that anyone with a balance of \euro 4000 or more is credit worthy
+	
+	\item Classification: if $y(x) \geq 0.5$, then ``credit worthy''; else ``not''
+	
+	\item Slope of the regression line depends on the how many data points are in each of the two buckets
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[t]
+\frametitle{Why not Linear Regression?}
+\textbf{Example 1}
+\begin{itemize}
+	\item With more data points in the ``positive'' bucket, the slope of the regression line is less steep.
+	\item The threshold predicted also changes.
+\end{itemize}
+ 
+\includegraphics[scale=0.3]{bb_cw2.png}
+\includegraphics[scale=0.3]{lin_reg_bb_cw2.png}
 \end{frame}
 
 \begin{frame}[t]
