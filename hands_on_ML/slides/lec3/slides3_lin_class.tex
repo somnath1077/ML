@@ -205,63 +205,81 @@ Consider the following (simplified) problem: given the bank balance $x$ of an in
 \end{frame}
 
 \begin{frame}[t]
-\frametitle{Linear Regression Models and Least Squares~$\ldots$}
+\frametitle{Binary Classification: Logistic Regression}
+
 \begin{itemize}
-    \item Typical situation: we have training data 
-    \[(x^{(1)}, y^{(1)}), \ldots, (x^{(m)}, y^{(m)})\] 
-    from which to estimate the parameters $\theta$.
+    \item  Two classes: $0$ and $1$
     
-    \item Least squares: pick parameters $\theta = \trans{(\theta_0, \ldots, \theta_n)}$ to minimize 
-    \[J(\theta) = 
-    \frac{1}{2} \sum_{i = 1}^{m} \left (y^{(i)} - \sum_{j = 0}^{n} x^{(i)}_j \theta_j \right )^2\]   
-\end{itemize}
-
-\pause
-
-\begin{itemize}
-    \item Gradient descent
-    \item Analytical solution
-    \item Probabilistic interpretation
+    \item Logistic regression models the probability that the response
+    variable $y$ belongs to a particular class: $P(y = 1 \mid x)$
+    
+    \item $P(y = 1 \mid x; \theta) = g(\trans{\theta} x) = \frac{1}{1 + e^{- \trans{\theta} x}}$
+    
+    \item $g(z) = \frac{1}{1 + e^{- \trans{\theta} x}}$ is the sigmoid function
 \end{itemize}
 \end{frame}
 
 \begin{frame}[t]
-\frametitle{Gradient Descent}
+\frametitle{The Sigmoid Function}
+\begin{center}
+	\includegraphics[scale=0.3]{sigmoid_function.png}
+\end{center}
+
 \begin{itemize}
-    \item Start with an ``initial guess'' for $\theta$
-
-    \pause
-
-    \item Repeatedly perform the update for all $0 \leq j \leq n$:
-    \[
-        \theta_j := \theta_j - \alpha \frac{\partial}{\partial \theta_j} J(\theta),
-    \]
-    where $\alpha$ is the learning rate.
-
-    \pause 
-
-    \item For each $0 \leq j \leq n$:
-    $
-        \partial J(\theta)/ \partial \theta_j = - \sum_{i = 1}^m 
-        \left ( y^{(i)} - \sum_{j = 0}^n x_j^{(i)} \theta_j \right ) \cdot x_j^{(i)}.
-    $
-    
-    \pause
-
-    \item Magnitude of update: a linear function of the input vectors, where the
-    coefficients are the error terms $y - \sum_j x_j \theta_j$
-
-    \pause
-
-    \item Looks at every input in the training set before making an update: \pause
-    \textbf{batch gradient descent}
-    
-    \pause
-
-    \item Gradient descent is susceptible to \textbf{local minima} in general; in
-    this case, $J$ is a \textbf{convex} function and has a \textbf{unique global
-    minimum}.  
+	\item $g(z) \to 1$ as $z \to \infty$
+	\item $g(z) \to 0$ as $z \to -\infty$
+	\item $g'(z) = g(z) (1 - g(z))$
 \end{itemize}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Logistic Regression: Learning the Model Parameters}
+In logistic regression, the probabilities are modeled as follows:
+\begin{equation*}
+\begin{split}
+P(y = 1 \mid x; \theta) & = g(\trans{\theta} x) = \frac{1}{1 + e^{- \trans{\theta} x}} \\
+P(y = 0 \mid x; \theta) & = 1 - g(\trans{\theta} x) 
+\end{split}
+\end{equation*}
+
+\pause
+
+\[
+	P(y \mid x; \theta) = \left( g(\trans{\theta} x) \right)^{y} \cdot 
+		\left ( 1 - g(\trans{\theta} x) \right )^{1 - y}
+\]
+
+\pause
+
+\textbf{The Likelihood Function} 
+
+Assume that the $m$ training examples $(x^{(1)}, y^{(1)}), \ldots (x^{(m)}, y^{(m)})$ were generated \emph{independently}. 
+\begin{equation*}
+\begin{split}
+		L(\theta; \{(x^{(i)}, y^{(i)})\}_{i = 1}^{m}) & = 
+				\prod_{i = 1}^{m} P(y^{(i)} \mid x^{(i)}; \theta) \\
+				& = \prod_{i = 1}^{m} \left( g(\trans{\theta} x^{(i)}) \right)^{y^{(i)}} \cdot 
+						\left ( 1 - g(\trans{\theta} x^{(i)}) \right )^{(1 - y^{(i)})} \\
+\end{split}
+\end{equation*}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Maximizing the Likelihood}
+\begin{equation*}
+\begin{split}
+l(\theta) & =  \log L(\theta) \\
+          & = \sum_{i = 1}^{m} y^{(i)} \log g(\trans{\theta} x^{(i)}) 
+          		+ (1 - y^{(i)}) \log(1 - g(\trans{\theta} x^{(i)}))
+\end{split}
+\end{equation*}
+
+\begin{itemize}
+	\item USe gradient ascent to maximize $l(\theta)$
+	
+	\item $\theta_{\text{new}} := \theta_{\text{old}} + \alpha \nabla_{\theta} l(\theta)$
+\end{itemize}
+
 \end{frame}
 
 \begin{frame}[t]
