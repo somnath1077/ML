@@ -265,7 +265,8 @@ Assume that the $m$ training examples $(x^{(1)}, y^{(1)}), \ldots (x^{(m)}, y^{(
 \end{frame}
 
 \begin{frame}[t]
-\frametitle{Maximizing the Likelihood}
+\frametitle{Maximizing the Likelihood $\ldots$}
+$\ldots$ is equivalent to maximizing the log-likelihood:
 \begin{equation*}
 \begin{split}
 l(\theta) & =  \log L(\theta) \\
@@ -275,7 +276,7 @@ l(\theta) & =  \log L(\theta) \\
 \end{equation*}
 
 \begin{itemize}
-	\item USe gradient ascent to maximize $l(\theta)$
+	\item Use gradient ascent to maximize $l(\theta)$
 	
 	\item $\theta_{\text{new}} := \theta_{\text{old}} + \alpha \nabla_{\theta} l(\theta)$
 	
@@ -291,7 +292,20 @@ l(\theta) & =  \log L(\theta) \\
 \begin{itemize}
 	\item Once $\theta$ has been estimated (using maximum likelihood, for instance),
 			given $x$, $P(y = 1 \mid x) = g(\trans{\theta} \cdot x)$
-	\item We could for instance classify $x$ as belonging to class~$1$ iff $g(\trans{\theta}) \geq 0.5$
+	\item We could for instance classify $x$ as belonging to class~$1$ iff $g(\trans{\theta} x) \geq 0.5$
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Evaluating the Performance of a Classifier}
+Harder than evaluating a linear regressor.
+\begin{itemize}
+	\item Consider unbalanced data sets: let's say that 90\% of customers in an online store 
+		are one-time customers.
+	
+	\item Want to determine whether a customer is a one-time customer.
+	
+	\item A ``dumb'' classifier that declares every customer as ``bad'' has 90\% accuracy.  
 \end{itemize}
 \end{frame}
 
