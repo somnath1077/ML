@@ -150,7 +150,10 @@
 \DeclareMathOperator{\RSS}{RSS}
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\RSE}{RSE}
-
+\newcommand{\TP}{\ensuremath{\text{TP}}}
+\newcommand{\FP}{\ensuremath{\text{FP}}}
+\newcommand{\TN}{\ensuremath{\text{TN}}}
+\newcommand{\FN}{\ensuremath{\text{FN}}}
 %\newtheorem{theorem}{Theorem}
 \title{Classification}
 \begin{document}
@@ -271,7 +274,7 @@ $\ldots$ is equivalent to maximizing the log-likelihood:
 \begin{split}
 l(\theta) & =  \log L(\theta) \\
           & = \sum_{i = 1}^{m} y^{(i)} \log g(\trans{\theta} x^{(i)}) 
-          		+ (1 - y^{(i)}) \log(1 - g(\trans{\theta} x^{(i)}))
+          		+ (1 - y^{(i)}) \log(1 - g(\trans{\theta} \cdot x^{(i)}))
 \end{split}
 \end{equation*}
 
@@ -283,7 +286,7 @@ l(\theta) & =  \log L(\theta) \\
 	\item $\theta_j := \theta_j + \alpha \cdot \sum_{i = 1}^{m} \left ( y^{(i)} - 
 					    g(\trans{\theta} x^{(i)}) \right ) \cdot x_j^{(i)}$
 	\item Stochastic gradient ascent: $\theta_j := \theta_j + \alpha \cdot 
-										(y^{(i)} - g(\trans{\theta} x^{(i)}) )\cdot x_j^{(i)}$
+										(y^{(i)} - g(\trans{\theta} \cdot x^{(i)}) )\cdot x_j^{(i)}$
 \end{itemize}
 \end{frame}
 
@@ -292,7 +295,7 @@ l(\theta) & =  \log L(\theta) \\
 \begin{itemize}
 	\item Once $\theta$ has been estimated (using maximum likelihood, for instance),
 			given $x$, $P(y = 1 \mid x) = g(\trans{\theta} \cdot x)$
-	\item We could for instance classify $x$ as belonging to class~$1$ iff $g(\trans{\theta} x) \geq 0.5$
+	\item We could for instance classify $x$ as belonging to class~$1$ iff $g(\trans{\theta} \cdot x) \geq 0.5$
 \end{itemize}
 \end{frame}
 
@@ -306,6 +309,17 @@ Harder than evaluating a linear regressor.
 	\item Want to determine whether a customer is a one-time customer.
 	
 	\item A ``dumb'' classifier that declares every customer as ``bad'' has 90\% accuracy.  
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Precision and Recall}
+\begin{center}
+	\includegraphics[scale=0.2]{precision_recall.png}
+\end{center}
+\begin{itemize}
+	\item Accuracy of positive predictions = $\text{Precision} = \frac{\TP}{\TP + \FP}$
+	\item Fraction of positive instances correctly classified = $\text{Recall} = \frac{\TP}{\TP + \FN}$  
 \end{itemize}
 \end{frame}
 
