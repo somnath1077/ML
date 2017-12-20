@@ -319,7 +319,29 @@ Harder than evaluating a linear regressor.
 \end{center}
 \begin{itemize}
 	\item Accuracy of positive predictions = $\text{Precision} = \frac{\TP}{\TP + \FP}$
+	
 	\item Fraction of positive instances correctly classified = $\text{Recall} = \frac{\TP}{\TP + \FN}$  
+	
+	\pause
+	
+	\item A single score to compare different classifiers?
+	
+	\pause
+	
+	\item \textbf{F1 score} = harmonic mean of the precision and recall = $\frac{2}{1/P + 1/R}$
+	
+	\item F1 score penalizes classifiers with either small precision or recall
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{F1 Score}
+The F1 score favors classifiers with a similar precision and recall.
+
+\begin{itemize}
+	\item $P = 0.5, R = 0.5$ gives $F1 = 0.5$
+	\item $P = 0.9, R = 0.4$ gives $F1 = 0.55$
+	\item 
 \end{itemize}
 \end{frame}
 
