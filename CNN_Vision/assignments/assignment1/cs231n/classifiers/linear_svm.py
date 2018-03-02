@@ -68,7 +68,6 @@ def svm_loss_vectorized(W, X, y, reg):
   """
   loss = 0.0
   dW = np.zeros(W.shape) # initialize the gradient as zero
-  print(X.shape[0])
   num_train = X.shape[0]
   #############################################################################
   # TODO:                                                                     #
