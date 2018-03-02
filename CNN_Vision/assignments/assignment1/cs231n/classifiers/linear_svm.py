@@ -1,6 +1,6 @@
 import numpy as np
 from random import shuffle
-from sklearn.svm import SVR
+
 
 def svm_loss_naive(W, X, y, reg):
   """
