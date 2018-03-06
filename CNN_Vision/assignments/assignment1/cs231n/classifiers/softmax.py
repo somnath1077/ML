@@ -32,9 +32,22 @@ def softmax_loss_naive(W, X, y, reg):
     num_train = X.shape[0]
     num_classes = W.shape[1]
 
+    ##############################################################################
+    # The loss function is:                                                      #
+    # L(W) = - sum_{i = 1}^{N} sum_{k = 1}^{C} 1{y[i] == k} * log                #
+    # (exp(x[i].dot(W[:, k])) / (sum_{j = 1}^{C} exp(x[i].dot(W[:, j])))         #
+    ##############################################################################
+    # The gradient of the loss function wrt W[:, k] is:                          #
+    #                                                                            #
+    # grad_{W[: , k]} = - sum_{i = 1}^{N} [x[i] * (1{y[i] == k} -                #
+    #                                            Pr(y[i] = k | x[i]; W))]        #
+    ##############################################################################
     for i in range(num_train):
         class_scores = X[i].dot(W)
-        class_scores -= np.max(class_scores)  # numeric stability
+        # For numeric stability, we subtract the maximum from
+        # each of the class_scores. Since we take exponentials
+        # and then divide by the sum, we get back the same result.
+        class_scores -= np.max(class_scores)
         class_scores_exp = np.exp(class_scores).reshape((10, 1))
 
         class_probs = class_scores_exp / np.sum(class_scores_exp)
@@ -43,7 +56,6 @@ def softmax_loss_naive(W, X, y, reg):
 
         d = np.zeros((num_classes, 1))
         d[y[i]] = 1
-        # print(class_probs.shape)
         d -= class_probs
         x = X[i].reshape((1, X[i].shape[0]))
         dW += (-1) * d.dot(x).T
@@ -69,7 +81,6 @@ def softmax_loss_vectorized(W, X, y, reg):
     loss = 0.0
     dW = np.zeros_like(W)
     num_train = X.shape[0]
-    num_classes = W.shape[1]
 
     #############################################################################
     # TODO: Compute the softmax loss and its gradient using no explicit loops.  #
