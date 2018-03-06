@@ -1,7 +1,6 @@
 from __future__ import print_function
 
 import numpy as np
-from past.builtins import xrange
 
 
 class TwoLayerNet(object):
@@ -105,10 +104,10 @@ class TwoLayerNet(object):
         max_scores = np.max(scores, axis=1, keepdims=True)
         shifted_scores = scores - max_scores
 
-        exp_scores = np.exp(shifted_scores) # N * C
-        class_probs = exp_scores / np.sum(exp_scores, axis=1, keepdims=True) # N * C
-        correct_class_prob = class_probs[np.arange(N), y] # N * 1
-        correct_logprobs = - np.log(correct_class_prob) # N * 1
+        exp_scores = np.exp(shifted_scores)  # N * C
+        class_probs = exp_scores / np.sum(exp_scores, axis=1, keepdims=True)  # N * C
+        correct_class_prob = class_probs[np.arange(N), y]  # N * 1
+        correct_logprobs = - np.log(correct_class_prob)  # N * 1
 
         data_loss = np.sum(correct_logprobs) / N
         reg_loss = 0.5 * reg * np.sum(W1 * W1) + 0.5 * reg * np.sum(W2 * W2)
@@ -161,7 +160,7 @@ class TwoLayerNet(object):
         train_acc_history = []
         val_acc_history = []
 
-        for it in xrange(num_iters):
+        for it in range(num_iters):
             X_batch = None
             y_batch = None
 

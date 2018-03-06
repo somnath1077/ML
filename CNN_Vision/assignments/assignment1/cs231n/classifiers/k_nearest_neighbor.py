@@ -1,5 +1,4 @@
 import numpy as np
-from past.builtins import xrange
 
 
 class KNearestNeighbor(object):
@@ -89,7 +88,7 @@ class KNearestNeighbor(object):
         num_test = X.shape[0]
         num_train = self.X_train.shape[0]
         dists = np.zeros((num_test, num_train))
-        for i in xrange(num_test):
+        for i in range(num_test):
             #######################################################################
             # TODO:                                                               #
             # Compute the l2 distance between the ith test point and all training #
