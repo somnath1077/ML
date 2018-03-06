@@ -124,7 +124,15 @@ class TwoLayerNet(object):
         # and biases. Store the results in the grads dictionary. For example,       #
         # grads['W1'] should store the gradient on W1, and be a matrix of same size #
         #############################################################################
-        pass
+        true_indices = np.zeros(class_probs.shape)
+        true_indices[np.arange(N), y] = 1
+        ds = (class_probs - true_indices) / N
+        grads['W2'] = h1.transpose().dot(ds) + reg * W2
+        grads['b2'] = ds.sum(axis=0)
+        dh1 = ds.dot(W2.transpose())
+        dh0 = dh1 * 1 * (np.maximum(h0, 0) > 0)
+        grads['W1'] = X.transpose().dot(dh0) + reg * W1
+        grads['b1'] = dh0.sum(axis=0)
         #############################################################################
         #                              END OF YOUR CODE                             #
         #############################################################################
@@ -161,14 +169,19 @@ class TwoLayerNet(object):
         val_acc_history = []
 
         for it in range(num_iters):
-            X_batch = None
-            y_batch = None
-
             #########################################################################
             # TODO: Create a random minibatch of training data and labels, storing  #
             # them in X_batch and y_batch respectively.                             #
             #########################################################################
-            pass
+            sampleIndices = np.random.choice(num_train, batch_size)
+
+            selected_indices = sampleIndices[0: max(batch_size, len(sampleIndices))]
+
+            X_batch = X[selected_indices, :]
+            assert X_batch.shape[1] == X.shape[1]
+
+            y_batch = y[selected_indices]
+
             #########################################################################
             #                             END OF YOUR CODE                          #
             #########################################################################
@@ -183,7 +196,10 @@ class TwoLayerNet(object):
             # using stochastic gradient descent. You'll need to use the gradients   #
             # stored in the grads dictionary defined above.                         #
             #########################################################################
-            pass
+            self.params['W1'] -= learning_rate * grads['W1']
+            self.params['W2'] -= learning_rate * grads['W2']
+            self.params['b1'] -= learning_rate * grads['b1']
+            self.params['b2'] -= learning_rate * grads['b2']
             #########################################################################
             #                             END OF YOUR CODE                          #
             #########################################################################
@@ -223,14 +239,18 @@ class TwoLayerNet(object):
           the elements of X. For all i, y_pred[i] = c means that X[i] is predicted
           to have class c, where 0 <= c < C.
         """
-        y_pred = None
-
         ###########################################################################
         # TODO: Implement this function; it should be VERY simple!                #
         ###########################################################################
-        pass
+        W1, b1 = self.params['W1'], self.params['b1']
+        W2, b2 = self.params['W2'], self.params['b2']
+        N, D = X.shape
         ###########################################################################
         #                              END OF YOUR CODE                           #
         ###########################################################################
+        H1 = X.dot(W1) + b1
+        relu1 = np.maximum(H1, np.zeros_like(H1))
+        scores = relu1.dot(W2) + b2
+        y_pred = np.argmax(scores, axis=1)
 
         return y_pred
