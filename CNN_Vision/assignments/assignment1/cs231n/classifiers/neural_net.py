@@ -67,16 +67,24 @@ class TwoLayerNet(object):
         # Unpack variables from the params dictionary
         W1, b1 = self.params['W1'], self.params['b1']
         W2, b2 = self.params['W2'], self.params['b2']
-        N, D = X.shape
+        N, C = X.shape
 
         # Compute the forward pass
-        scores = None
+        relu = lambda x: np.maximum(0, x)
+
+        # First fully connected layer: h0 has dims N * H
+        h0 = np.dot(X, W1) + b1
+        # ReLU: h1 has dims N * H
+        h1 = relu(h0)
+        # Second fully connected layer: h2 has dims N * C
+        h2 = h1.dot(W2) + b2
+
+        scores = h2
         #############################################################################
         # TODO: Perform the forward pass, computing the class scores for the input. #
         # Store the result in the scores variable, which should be an array of      #
         # shape (N, C).                                                             #
         #############################################################################
-        pass
         #############################################################################
         #                              END OF YOUR CODE                             #
         #############################################################################
@@ -93,7 +101,19 @@ class TwoLayerNet(object):
         # in the variable loss, which should be a scalar. Use the Softmax           #
         # classifier loss.                                                          #
         #############################################################################
-        pass
+        # For numeric stability:
+        max_scores = np.max(scores, axis=1, keepdims=True)
+        shifted_scores = scores - max_scores
+
+        exp_scores = np.exp(shifted_scores) # N * C
+        class_probs = exp_scores / np.sum(exp_scores, axis=1, keepdims=True) # N * C
+        correct_class_prob = class_probs[np.arange(N), y] # N * 1
+        correct_logprobs = - np.log(correct_class_prob) # N * 1
+
+        data_loss = np.sum(correct_logprobs) / N
+        reg_loss = 0.5 * reg * np.sum(W1 * W1) + 0.5 * reg * np.sum(W2 * W2)
+
+        loss = data_loss + reg_loss
         #############################################################################
         #                              END OF YOUR CODE                             #
         #############################################################################
