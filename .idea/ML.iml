@@ -5,7 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/nn_and_vision" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.6.3 virtualenv at ~/Envs/env3.6" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.7 (ML)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TestRunnerService">
