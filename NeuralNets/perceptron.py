@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 
+
 def train_perceptron(data_set: np.array,
                      labels: np.array,
                      learning_rate: float,
@@ -35,8 +36,9 @@ def train_perceptron(data_set: np.array,
                 # print('After adjustment: {}'.format(w[j]))
         print('Iter: {}, weights: {}'.format(i, w))
 
-        #learning_rate /= 2
+        # learning_rate /= 2
     return w
+
 
 if __name__ == '__main__':
     data_set = pd.DataFrame({'x1': [0, 0, 1, 1],
