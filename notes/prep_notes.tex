@@ -5,8 +5,11 @@
 
 \DeclareMathOperator{\cov}{Cov}
 \DeclareMathOperator{\sd}{\sigma}
+\DeclareMathOperator{\pr}{P}
 \DeclareMathOperator{\E}{E}
 \DeclareMathOperator{\var}{Var}
+% for the differential operator
+\DeclareMathOperator{\der}{d}
 
 \newcommand{\ts}[3]{\ensuremath{\left \{ #1 \right \}_{#2}^{#3}}}
 \newcommand{\eqd}{\ensuremath{\stackrel{d}{=}}}
@@ -93,6 +96,29 @@ of $\{ X_t \}$ at lag~$h$ is defined as
 	\frac{ \cov( X_h, X_0 )}{ \var(X_0) }.
 \]   
 
+\section{Bayesian Statistics and MCMC}
+This section is based on Chapters~12--15 from~\cite{Lam}. Bayes' rule gives us a
+ recipe for calculating the posterior probability density. 
+\begin{equation}
+	\pr (\Theta \mid \text{data}) = 
+	\frac{\pr (\text{data} \mid \Theta) \cdot \pr (\Theta)}{\pr (\text{data})}.
+\end{equation}
+Consider a case in which we have a sample of $N$ data points $x_1, \ldots, x_N$. 
+We assume that the likelihood is a Poisson distribution with mean $\lambda$ and that
+the prior for $\lambda$ is a log-normal$(1, 1)$ distribution. To calculate the probability
+of the data $\pr (\text{data})$, we must evaluate the integral:
+\begin{equation}
+	\pr (\text{data}) = \int_{0}^{\infty} 
+		\prod_{i = 1}^N \frac{\lambda^{x_i} e^{- \lambda}}{x_i!} \cdot 
+		\frac{1}{\sqrt{2 \pi} \lambda} e^{- \frac{1}{2} (\log \lambda - 1)^2} 
+		d\lambda.
+\end{equation}
+While this integral is not too difficult, it explains the problem of calculating 
+posteriors analytically. As the number of parameters (the length of $\Theta$) 
+increases, calculating the probability of the data requires evaluating integrals 
+in higher dimensional spaces. This is why we use alternative methods to derive 
+approximate versions of the posterior.
+
 \section{Trees, Boosting and Random Forests}
 
 \section{Neural Networks}
@@ -105,6 +131,9 @@ of $\{ X_t \}$ at lag~$h$ is defined as
 Second Edition, Duxbury Advanced Series, 2001.
 
 \bibitem{Hyn} Rob J.~Hyndman and George Athanasopoulos. \emph{Forecasting: Principles and Practice}, Second Edition. Online book at: \url{https://otexts.com/fpp2/}
+
+\bibitem{Lam} Ben Lambert. \emph{A Student's Guide to Bayesian Statistics}, Sage 
+Publications, 2018. 
 
 \end{thebibliography}
 \end{document}
