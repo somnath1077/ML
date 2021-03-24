@@ -163,6 +163,49 @@ The last equality follows since $\cov (S_t, X_{t + i}) = 0$ for all $i \geq 1$.
 Hence $\cov (S_t, S_{t + h})$ depends on $t$ and $\{ S_t \}$ is not stationary.
 \end{example}
 
+\begin{example}[First-Order Moving Average]
+Consider the series defined by
+\begin{equation}
+    X_t = Z_t + \theta Z_{t - 1}, \quad t = 0, \pm 1, \pm 2, \ldots,
+\end{equation}
+where $Z_t \sim \WN(0, \sigma^2)$ and $\theta$ is a real-valued constant. Now 
+$\E [X_t] = 0$ and 
+\begin{align*}
+    \E [X_t^2] & = \E [ (Z_t + \theta Z_{t - 1})^2 ] \\
+               & = \E [ Z_t^2 + 2 \theta Z_t Z_{t - 1} + \theta^2 Z_{t - 1}^2] \\
+               & = \sigma^2 + 2 \theta \E [Z_t Z_{t - 1}] +  \theta^2 \sigma^2 \\
+               & = (1 + \theta^2) \sigma^2.
+\end{align*}
+The last equality follows since, $Z_t$ and $Z_{t - 1}$ being uncorrelated, 
+satisfy $\cov (Z_t, Z_{t - 1}) = 0$. Recall that 
+$\cov (Z_t, Z_{t - 1}) = \E [Z_t Z_{t - 1}] - \E [Z_t] \E [Z_{t - 1}]$ 
+and that being uncorrelated is sufficient for the expectation of the product 
+of two random variables to be equal to the product of their expectations. One 
+can easily verify that for all $t$
+\begin{equation}
+    \cov (X_t, X_{t + h}) = 
+        \left \{ 
+            \begin{array}{ll}
+                (1 + \theta^2) \sigma^2 & \text{ if } h = 0 \\
+                \theta \sigma^2         & \text{ if } h = \pm 1 \\
+                0                       & \text{ if } |h| \geq 2.
+            \end{array}        
+        \right . 
+\end{equation} 
+Thus the conditions of weak stationarity hold and the sequence $\{ X_t \}$ 
+is weakly stationary. The autocorrelation function is given by:
+\begin{equation}
+    \rho (h) = \frac{\cov (X_0, X_{h})}{\var(X_0)} = 
+        \left \{ 
+            \begin{array}{ll}
+                1                             & \text{ if } h = 0 \\
+                \frac{\theta}{1 + \theta^2}   & \text{ if } h = \pm 1 \\
+                0                             & \text{ if } |h| \geq 2.
+            \end{array}        
+        \right . 
+\end{equation} 
+\end{example}
+
 \section{Bayesian Statistics and MCMC}
 This section is based on Chapters~12--15 from~\cite{Lam}. Bayes' rule gives us a
  recipe for calculating the posterior probability density. 
