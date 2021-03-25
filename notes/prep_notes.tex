@@ -206,6 +206,39 @@ is weakly stationary. The autocorrelation function is given by:
 \end{equation} 
 \end{example}
 
+\begin{example}[First-Order Autoregression]
+Let $\{ X_t \}$ be a stationary series satisfying the equation:
+\begin{equation}
+    X_t = \phi X_{t - 1} + Z_t \quad t = 0, \pm 1, \pm 2, \ldots,
+\end{equation}
+where $\{ Z_t \} \sim \WN(0, \sigma^2)$, $|\phi| < 1$ and $Z_t$ is uncorrelated 
+with $X_s$ for all $s < t$. As can be seen, $\E [X_t] = 0$ and for $h > 0$:
+\begin{align*}
+\cov (X_{t + h}, X_t) 
+    & = \cov (\phi X_{t + h - 1} + Z_{t + h}, X_t) \\
+    & = \phi \cov (X_{t + h - 1}, X_t) + \cov (Z_{t + h}, X_t) \\
+    & = \phi \cov (X_{t + h - 1}, X_t).
+\end{align*}
+From this, one can show that $\cov (X_{t + h}, X_t) = \phi^h \cov (X_t, X_t)$. 
+By assumption, $\{ X_t \}$ is stationary and hence 
+$\cov (X_{t + h}, X_t) = \phi^h \cov (X_0, X_0)$
+Next suppose that $h < 0$. Let $s = t + h = t - |h|$ so that $t = s + |h|$. 
+Then $\cov (X_{t + h}, X_t) = \cov (X_s, X_{s + |h|}) = 
+\phi^{|h|} \cov (X_s, X_s) = \phi^{|h|} \cov (X_0, X_0)$. 
+The autocorrelation function at lag $h$ is 
+\[
+    \rho(h) = \frac{ \phi^{|h|}  \cov (X_0, X_0) }{ \cov (X_0, X_0)} = \phi^{|h|}.
+\]
+
+One can also obtain a closed-form expression for $\cov (X_0, X_0)$. Since 
+$\cov (X_0, X_0) = \cov (X_t, X_t)$ and 
+\[
+    \cov (X_t, X_t) = \cov (\phi X_{t - 1} + Z_t, \phi X_{t - 1} + Z_t) 
+    = \phi^2 \cov (X_0, X_0) + \cov (Z_t, Z_t), 
+\]
+we obtain that $\cov (X_0, X_0) = \sigma^2 / (1 - \phi^2)$.
+\end{example}
+
 \section{Bayesian Statistics and MCMC}
 This section is based on Chapters~12--15 from~\cite{Lam}. Bayes' rule gives us a
  recipe for calculating the posterior probability density. 
