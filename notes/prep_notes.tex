@@ -17,6 +17,7 @@
 
 \newcommand{\ts}[3]{\ensuremath{\left \{ #1 \right \}_{#2}^{#3}}}
 \newcommand{\eqd}{\ensuremath{\stackrel{d}{=}}}
+\newcommand{\set}{\ensuremath{\stackrel{\text{set}}{=}}}
 \newcommand{\iid}{\ensuremath{\stackrel{\text{iid}}{\sim}}}
 
 \theoremstyle{definition}
@@ -27,7 +28,11 @@
 \begin{document}
 \maketitle
 
-\section{Basics}
+\section{Basic Statistics}
+In this section, we review some basic concepts from Statistics. The material 
+in this section is based on~\cite{DegSch}.
+
+\subsection{Covariance and Correlation}
 
 The \emph{correlation} between two sets of data is a measure of the strength of
 the relationship between them. In particular, Pearson's correlation coefficient
@@ -44,6 +49,43 @@ Two important facts about the Pearson's correlation coefficient~\cite{CasBer}:
 	$Y = aX + b$.
 \end{enumerate}
 
+\subsection{Maximum Likelihood Estimation}
+Let the random variables $X_1, \ldots, X_n$ form a random sample from a 
+distribution with pdf~$f(x \mid \theta)$. Recall that this means that 
+$X_i \iid f( \cdot \mid \theta)$ for all~$1 \leq i \leq n$. 
+Let $f_n(\vec{x} \mid \theta)$ denote the value of the joint pdf of 
+the random vector $(X_1, \ldots, X_n)'$ at the point 
+$\vec{x} = (x_1, \ldots, x_n)'$. The \emph{likelihood function} is the joint pdf 
+of the observations of a random sample viewed as a function of $\theta$ for 
+a given set of values of the sample. The maximum likelihood estimate of 
+$\theta$ is that value of $\theta$ for which $f_n (\vec{x} \mid \theta)$ is 
+maximized. 
+\begin{example}
+Suppose that $X_1, \ldots, X_n$ form a random sample from a distribution with 
+pdf $f(x \mid \theta)$ defined as follows:
+\[
+    f(x \mid \theta) = 
+        \left \{
+            \begin{array}{ll}
+                \theta x^{\theta - 1} & \text{ for } 0 < x < 1 \\
+                0                     & \text{ otherwise}.
+            \end{array} 
+        \right .
+\]
+Let us assume that $\theta > 0$. The joint distribution of the vector 
+$(X_1, \ldots, X_n)'$ at the point $\vec{x} = (x_1, \ldots, x_n)'$ is 
+\[
+    f_n (\vec{x} \mid \theta ) = \prod_{i = 1}^n \theta x_i^{\theta - 1},
+\]
+where we assume that $0 < x_i < 1$ for all $i$. Taking logs, we obtain that
+$\log f_n (\vec{x} \mid \theta) = n \log \theta + (\theta - 1) \sum_i \log x_i$. 
+Take the derivative wrt~$\theta$ and set to $0$:
+\[
+    \frac{\partial \log f_n (\vec{x} \mid \theta)}{\partial \theta} = 
+        \frac{n}{\theta} + \sum_i \log x_i \set 0
+\]
+to obtain that $\theta = n / \sum_i \log \frac{1}{x_i}$.
+\end{example}   
 
 \section{Timeseries}
 
