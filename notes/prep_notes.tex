@@ -87,6 +87,25 @@ Take the derivative wrt~$\theta$ and set to $0$:
 to obtain that $\theta = n / \sum_i \log \frac{1}{x_i}$.
 \end{example}   
 
+\begin{example}
+Suppose that $X_1, \ldots, X_n$ form a random sample from a distribution with 
+pdf $f(x \mid \theta)$ defined as follows:
+\[
+    f(x \mid \theta) = \frac{1}{2} e^{- |x - \theta|} 
+        \quad \text{ for } -\infty < x < \infty.
+\]
+Suppose that $\theta$ is unknown and that $-\infty < \theta < \infty$. 
+In this case, the joint probability distribution is easily seen to be:
+\[
+    f_n(\vec{x} \mid \theta) = \frac{1}{2^n} e^{- \sum_i |x_i - \theta|}.
+\]
+Take logs to obtain: 
+$\log f_n (\vec{x} \mid \theta) = \log \frac{1}{2^n} - \sum_i |x_i - \theta|$. 
+Maximizing $f_n$ is equivalent to minimizing $\sum_i |x_i - \theta|$. This 
+is equivalent to obtaining a point on the real line that minimizes the sum 
+of the distances to the points $x_1, \ldots, x_n$.
+\end{example}
+
 \section{Timeseries}
 
 The material in the section follows~\cite{BroDav}. A \emph{time series} is a
