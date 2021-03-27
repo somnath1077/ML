@@ -107,7 +107,7 @@ of the distances to the points $x_1, \ldots, x_n$. This happens when $\theta$
 is the median of $x_1, \ldots, x_n$.
 \end{example}
 
-\begin{example}
+\begin{example}\label{ex:stats_uniform}
 Suppose that $X_1, \ldots, X_n$ form a random sample from the uniform distribution
 on the interval $[\theta_1, \theta_2]$, where both $\theta_1$ and $\theta_2$ 
 are unknown $(-\infty < \theta_1 < \theta_2 < \infty)$. In this case, the 
@@ -153,6 +153,51 @@ from $1 \leq i \leq k - 1$, to obtain:
 which yields $\theta_k = n_k / n$. Substitute this in $\theta_i / \theta_k = n_i / n_k$
 to obtain $\theta_i = n_i / n$.
 \end{example} 
+
+\begin{example}[Nonexistence of an MLE]
+An obvious disadvantage of the technique of maximum likelihood estimation 
+is when the maximum does not exist. Consider again Example~\ref{ex:stats_uniform}
+where we let $\theta_1 = 0$ and $\theta = \theta_2$
+The pdf of the uniform distribution is defined as:
+\[
+    f(x \mid \theta) 
+        = \left \{ 
+            \begin{array}{ll}
+                \frac{1}{\theta} & 0 \leq x \leq \theta \\
+                0  & \text{ otherwise}. 
+            \end{array}
+          \right . 
+\]
+Let us modify the definition of the pdf so that we use strict inequalities 
+$0 < x < \theta$ above. Given a sample $x_1, \ldots, x_n$, the log pdf is 
+$- n \log \theta$ as before and the MLE technique would require us to 
+minimize $\log \theta$. However, in this case, there is no  
+$\theta > \max \{x_1, \ldots, x_n\}$ that mimimizes $\log \theta$ and the 
+MLE does not exist.    
+\end{example}
+
+\begin{example}[Non-uniqueness of an MLE]
+Consider a random sample $X_1, \ldots, X_n$ from the uniform distribution 
+over the interval $[\theta, \theta + 1]$. In this case, the joint pdf 
+is given by:
+\[
+    f_n(\vec{x} \mid \theta) 
+        = \left \{ 
+            \begin{array}{ll}
+                1  & \text{ for } \theta \leq x_i \leq \theta + 1 \quad (1 \leq i \leq n)\\
+                0  & \text{ otherwise}. 
+            \end{array}
+          \right . 
+\]
+In this case, the condition $\theta \leq x_i \leq \theta + 1$ for $1 \leq i \leq n$
+may be written using the two conditions:
+\[
+    \theta \leq \min \{x_1, \ldots, x_n\} \text{ and } 
+    \max \{x_1, \ldots, x_n \} - 1 \leq \theta.
+\]
+Any value of $\theta$ in the interval $[\max \{x_1, \ldots, x_n \} - 1, 
+\min \{x_1, \ldots, x_n\}]$ is valid, but there is no unique value of $\theta$.
+\end{example}
 
 \section{Timeseries}
 
