@@ -107,6 +107,53 @@ of the distances to the points $x_1, \ldots, x_n$. This happens when $\theta$
 is the median of $x_1, \ldots, x_n$.
 \end{example}
 
+\begin{example}
+Suppose that $X_1, \ldots, X_n$ form a random sample from the uniform distribution
+on the interval $[\theta_1, \theta_2]$, where both $\theta_1$ and $\theta_2$ 
+are unknown $(-\infty < \theta_1 < \theta_2 < \infty)$. In this case, the 
+log pdf of the joint distribution of $(X_1, \ldots, X_n)'$ is given by
+\[
+    \log f_n (\vec{x} \mid \theta_1, \theta_2) 
+    = \log \prod_{i = 1}^n \frac{1}{\theta_2 - \theta_1}    
+    = - n \log (\theta_2 - \theta_1).
+\]
+Maximizing the likelihood is equivalent to minimizing $\log (\theta_2 - \theta_1)$.
+The minimum possible value of $\theta_2$ is $\max \{x_1, \ldots, x_n\}$
+and the maximum possible value of $\theta_1$ is $\min \{x_1, \ldots, x_n\}$.
+\end{example}
+
+\begin{example}
+Suppose that a certain large population contains $k$ different types of 
+individuals $(k \geq 2)$, and let $\theta_i$ denote the proportion of people 
+of type~$i$, for $1 \leq i \leq k$. Here, $0 \leq \theta_i \leq 1$ and 
+$\sum_{i = 1}^k \theta_i = 1$. Suppose also that in a random sample of $n$ 
+individuals from this population there are exactly $n_i$ individuals of type~$i$
+so that $n = n_1 + \cdots + n_k$.
+
+In this setting, for $1 \leq i \leq k$, define $X_i$ to be the number of 
+individuals of type~$i$ in a random sample of size~$n$. Then the probability 
+that $\bigwedge_{i = 1}^k X_i = n_i$ is given by $\theta_1^{n_1} \cdots \theta_k^{n_k}$.  
+The log pdf of the joint distribution is given by:
+\[
+    \log f_k((n_1, \ldots, n_k) \mid \theta_1, \ldots, \theta_k, n) 
+        = \sum_{i = 1}^k n_i \log \theta_i. 
+\] 
+Note that there are actually $k - 1$ variables here since we may write 
+$\theta_k = 1 - \sum_{i = 1}^{k - 1} \theta_i$. Differentiating wrt $\theta_i$
+for $1 \leq i \leq k - 1$, we obtain:
+\[
+    \frac{\partial \log f_k}{\partial \theta_i} 
+        = \frac{n_i}{\theta_i} - \frac{n_k}{\theta_k}. 
+\]
+Setting this to $0$, we get that $\theta_i / \theta_k = n_i / n_k$. Sum this up
+from $1 \leq i \leq k - 1$, to obtain:
+\[
+    \frac{1 - \theta_k}{\theta_k} = \frac{n - n_k}{n_k},
+\] 
+which yields $\theta_k = n_k / n$. Substitute this in $\theta_i / \theta_k = n_i / n_k$
+to obtain $\theta_i = n_i / n$.
+\end{example} 
+
 \section{Timeseries}
 
 The material in the section follows~\cite{BroDav}. A \emph{time series} is a
