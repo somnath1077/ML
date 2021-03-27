@@ -63,6 +63,19 @@ But $\pr (Y \geq t^2) = \pr (| X - \E [X] | > t)$ and so this proves the
 Chebyschev inequality too.
 \end{proof}
 
+To talk about the law of large numbers, one has to talk about the notion of 
+a sequence of random variables converging to a real number. We say that 
+a sequence $Z_1, Z_2, \ldots$ of random variables converges to the number~$b$
+if the distribution of $Z_n$ as $n \to \infty$ becomes more and more 
+concentrated around this single number. 
+\begin{definition}[Convergence in Probability]
+A sequence $Z_1, Z_2, \ldots$ of random variables converges in probability to 
+the number~$b$ if for every $\epsilon > 0$, the following condition holds:
+\begin{equation}
+    \lim_{n \to \infty} \pr (|Z_n - b| < \epsilon) = 1.
+\end{equation}
+\end{definition} 
+
 \section{Maximum Likelihood Estimation}
 Let the random variables $X_1, \ldots, X_n$ form a random sample from a 
 distribution with pdf~$f(x \mid \theta)$. Recall that this means that 
