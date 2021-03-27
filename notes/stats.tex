@@ -1,0 +1,238 @@
+\chapter{Basic Statistics}
+In this section, we review some basic concepts from Statistics. The material 
+in this section is based on~\cite{DegSch}.
+
+\section{Covariance and Correlation}
+
+The \emph{correlation} between two sets of data is a measure of the strength of
+the relationship between them. In particular, Pearson's correlation coefficient
+is a measure of linear relationship between two sets of data. Let $X$ and $Y$
+be two random variables. Then Pearson's correlation coefficient $\rho(X, Y)$ is
+defined as:
+\begin{equation}
+    \rho(X, Y) = \frac{\cov(X, Y)}{\sd_X \sd_Y} 
+\end{equation}  
+Two important facts about the Pearson's correlation coefficient~\cite{CasBer}:
+\begin{enumerate}
+	\item $-1 \leq \rho(X, Y) \leq 1$
+	\item $|\rho(X, Y)| = 1$ iff there exists $a \neq 0$ and $b$ such that 
+	$Y = aX + b$.
+\end{enumerate}
+
+\section{Measure Concentration Inequalities and the Law of Large Numbers}
+We first look at Markov and Chebyshev inequalities and then apply them to 
+random samples.
+
+The Markov inequality tells us how much probability mass can be at large 
+values given the mean of the distribution.  
+\begin{theorem}\label{thm:stats:markov_ineq}
+Let $X$ be a random variable that takes on positive values only. Then for $t > 0$,
+\begin{equation} \label{ineq:markov}
+    \pr (X \geq t) \leq \frac{\E [X]}{t}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+Let us assume that $X$ is a continuous r.v. with pdf $f_X$. By definition, 
+\begin{align*}
+    \E [X] & = \int_{0}^{\infty} x f_X(x) dx \\
+           & = \int_{0}^{t} x f_X(x) dx + \int_{t}^{\infty} x f_X(x) dx \\
+           & \geq t \int_{t}^{\infty} f_X(x) dx.
+\end{align*} 
+Since $t > 0$, dividing both sides of the last inequality yields the Markov
+inequality.
+\end{proof}
+\noindent This inequality is useful when $t > \E [X]$; when $t \leq \E [X]$, it merely
+bounds $\pr (X \geq t)$ by $1$. 
+
+The Chebyschev inequality involves both the mean and the variance of the 
+distribution. It bounds the probability of how far a random variable can be 
+from its mean as a function of the variance. 
+\begin{theorem}
+Let $X$ be a random variable for which $\var (X)$ exists. Then 
+\begin{equation} \label{ineq:chebyschev}
+    \pr (\left | X - \E [X] \right | > t) \leq \frac{\var (X)}{t^2}.
+\end{equation}
+\end{theorem} 
+\begin{proof}
+Define $Y \coloneqq (X - \E [X])^2$ so that $\E [Y] = \var (X)$. Applying
+the Markov inequality to the r.v.~$Y$, we obtain:
+\[
+    \pr (Y \geq t^2) \leq \frac{\var (X)}{t^2}.
+\] 
+But $\pr (Y \geq t^2) = \pr (| X - \E [X] | > t)$ and so this proves the 
+Chebyschev inequality too.
+\end{proof}
+
+\section{Maximum Likelihood Estimation}
+Let the random variables $X_1, \ldots, X_n$ form a random sample from a 
+distribution with pdf~$f(x \mid \theta)$. Recall that this means that 
+$X_i \iid f( \cdot \mid \theta)$ for all~$1 \leq i \leq n$. 
+Let $f_n(\vec{x} \mid \theta)$ denote the value of the joint pdf of 
+the random vector $(X_1, \ldots, X_n)'$ at the point 
+$\vec{x} = (x_1, \ldots, x_n)'$. The \emph{likelihood function} is the joint pdf 
+of the observations of a random sample viewed as a function of $\theta$ for 
+a given set of values of the sample. The maximum likelihood estimate of 
+$\theta$ is that value of $\theta$ for which $f_n (\vec{x} \mid \theta)$ is 
+maximized. 
+\begin{example}
+Suppose that $X_1, \ldots, X_n$ form a random sample from a distribution with 
+pdf $f(x \mid \theta)$ defined as follows:
+\[
+    f(x \mid \theta) = 
+        \left \{
+            \begin{array}{ll}
+                \theta x^{\theta - 1} & \text{ for } 0 < x < 1 \\
+                0                     & \text{ otherwise}.
+            \end{array} 
+        \right .
+\]
+Let us assume that $\theta > 0$. The joint distribution of the vector 
+$(X_1, \ldots, X_n)'$ at the point $\vec{x} = (x_1, \ldots, x_n)'$ is 
+\[
+    f_n (\vec{x} \mid \theta ) = \prod_{i = 1}^n \theta x_i^{\theta - 1},
+\]
+where we assume that $0 < x_i < 1$ for all $i$. Taking logs, we obtain that
+$\log f_n (\vec{x} \mid \theta) = n \log \theta + (\theta - 1) \sum_i \log x_i$. 
+Take the derivative wrt~$\theta$ and set to $0$:
+\[
+    \frac{\partial \log f_n (\vec{x} \mid \theta)}{\partial \theta} = 
+        \frac{n}{\theta} + \sum_i \log x_i \set 0
+\]
+to obtain that $\theta = n / \sum_i \log \frac{1}{x_i}$.
+\end{example}   
+
+\begin{example}
+Suppose that $X_1, \ldots, X_n$ form a random sample from a distribution with 
+pdf $f(x \mid \theta)$ defined as follows:
+\[
+    f(x \mid \theta) = \frac{1}{2} e^{- |x - \theta|} 
+        \quad \text{ for } -\infty < x < \infty.
+\]
+Suppose that $\theta$ is unknown and that $-\infty < \theta < \infty$. 
+In this case, the joint probability distribution is easily seen to be:
+\[
+    f_n(\vec{x} \mid \theta) = \frac{1}{2^n} e^{- \sum_i |x_i - \theta|}.
+\]
+Take logs to obtain: 
+$\log f_n (\vec{x} \mid \theta) = \log \frac{1}{2^n} - \sum_i |x_i - \theta|$. 
+Maximizing $f_n$ is equivalent to minimizing $\sum_i |x_i - \theta|$. This 
+is equivalent to obtaining a point on the real line that minimizes the sum 
+of the distances to the points $x_1, \ldots, x_n$. This happens when $\theta$
+is the median of $x_1, \ldots, x_n$.
+\end{example}
+
+\begin{example}\label{ex:stats:uniform}
+Suppose that $X_1, \ldots, X_n$ form a random sample from the uniform distribution
+on the interval $[\theta_1, \theta_2]$, where both $\theta_1$ and $\theta_2$ 
+are unknown $(-\infty < \theta_1 < \theta_2 < \infty)$. In this case, the 
+log pdf of the joint distribution of $(X_1, \ldots, X_n)'$ is given by
+\[
+    \log f_n (\vec{x} \mid \theta_1, \theta_2) 
+    = \log \prod_{i = 1}^n \frac{1}{\theta_2 - \theta_1}    
+    = - n \log (\theta_2 - \theta_1).
+\]
+Maximizing the likelihood is equivalent to minimizing $\log (\theta_2 - \theta_1)$.
+The minimum possible value of $\theta_2$ is $\max \{x_1, \ldots, x_n\}$
+and the maximum possible value of $\theta_1$ is $\min \{x_1, \ldots, x_n\}$.
+\end{example}
+
+\begin{example}
+Suppose that a certain large population contains $k$ different types of 
+individuals $(k \geq 2)$, and let $\theta_i$ denote the proportion of people 
+of type~$i$, for $1 \leq i \leq k$. Here, $0 \leq \theta_i \leq 1$ and 
+$\sum_{i = 1}^k \theta_i = 1$. Suppose also that in a random sample of $n$ 
+individuals from this population there are exactly $n_i$ individuals of type~$i$
+so that $n = n_1 + \cdots + n_k$.
+
+In this setting, for $1 \leq i \leq k$, define $X_i$ to be the number of 
+individuals of type~$i$ in a random sample of size~$n$. Then the probability 
+that $\bigwedge_{i = 1}^k X_i = n_i$ is given by $\theta_1^{n_1} \cdots \theta_k^{n_k}$.  
+The log pdf of the joint distribution is given by:
+\[
+    \log f_k((n_1, \ldots, n_k) \mid \theta_1, \ldots, \theta_k, n) 
+        = \sum_{i = 1}^k n_i \log \theta_i. 
+\] 
+Note that there are actually $k - 1$ variables here since we may write 
+$\theta_k = 1 - \sum_{i = 1}^{k - 1} \theta_i$. Differentiating wrt $\theta_i$
+for $1 \leq i \leq k - 1$, we obtain:
+\[
+    \frac{\partial \log f_k}{\partial \theta_i} 
+        = \frac{n_i}{\theta_i} - \frac{n_k}{\theta_k}. 
+\]
+Setting this to $0$, we get that $\theta_i / \theta_k = n_i / n_k$. Sum this up
+from $1 \leq i \leq k - 1$, to obtain:
+\[
+    \frac{1 - \theta_k}{\theta_k} = \frac{n - n_k}{n_k},
+\] 
+which yields $\theta_k = n_k / n$. Substitute this in $\theta_i / \theta_k = n_i / n_k$
+to obtain $\theta_i = n_i / n$.
+\end{example} 
+
+\begin{example}[Nonexistence of an MLE]
+An obvious disadvantage of the technique of maximum likelihood estimation 
+is when the maximum does not exist. Consider again Example~\ref{ex:stats:uniform}
+where we let $\theta_1 = 0$ and $\theta = \theta_2$
+The pdf of the uniform distribution is defined as:
+\[
+    f(x \mid \theta) 
+        = \left \{ 
+            \begin{array}{ll}
+                \frac{1}{\theta} & 0 \leq x \leq \theta \\
+                0  & \text{ otherwise}. 
+            \end{array}
+          \right . 
+\]
+Let us modify the definition of the pdf so that we use strict inequalities 
+$0 < x < \theta$ above. Given a sample $x_1, \ldots, x_n$, the log pdf is 
+$- n \log \theta$ as before and the MLE technique would require us to 
+minimize $\log \theta$. However, in this case, there is no  
+$\theta > \max \{x_1, \ldots, x_n\}$ that mimimizes $\log \theta$ and the 
+MLE does not exist.    
+\end{example}
+
+\begin{example}[Non-uniqueness of an MLE]
+Consider a random sample $X_1, \ldots, X_n$ from the uniform distribution 
+over the interval $[\theta, \theta + 1]$. In this case, the joint pdf 
+is given by:
+\[
+    f_n(\vec{x} \mid \theta) 
+        = \left \{ 
+            \begin{array}{ll}
+                1  & \text{ for } \theta \leq x_i \leq \theta + 1 \quad (1 \leq i \leq n)\\
+                0  & \text{ otherwise}. 
+            \end{array}
+          \right . 
+\]
+In this case, the condition $\theta \leq x_i \leq \theta + 1$ for $1 \leq i \leq n$
+may be written using the two conditions:
+\[
+    \theta \leq \min \{x_1, \ldots, x_n\} \text{ and } 
+    \max \{x_1, \ldots, x_n \} - 1 \leq \theta.
+\]
+Any value of $\theta$ in the interval $[\max \{x_1, \ldots, x_n \} - 1, 
+\min \{x_1, \ldots, x_n\}]$ is valid, but there is no unique value of $\theta$.
+\end{example}
+
+\section{Bayesian Statistics and MCMC}
+This section is based on Chapters~12--15 from~\cite{Lam}. Bayes' rule gives us a
+ recipe for calculating the posterior probability density. 
+\begin{equation}
+	\pr (\Theta \mid \text{data}) = 
+	\frac{\pr (\text{data} \mid \Theta) \cdot \pr (\Theta)}{\pr (\text{data})}.
+\end{equation}
+Consider a case in which we have a sample of $N$ data points $x_1, \ldots, x_N$. 
+We assume that the likelihood is a Poisson distribution with mean $\lambda$ and 
+that the prior for $\lambda$ is a log-normal$(1, 1)$ distribution. To calculate 
+the probability of the data $\pr (\text{data})$, we must evaluate the integral:
+\begin{equation}
+	\pr (\text{data}) = \int_{0}^{\infty} 
+		\prod_{i = 1}^N \frac{\lambda^{x_i} e^{- \lambda}}{x_i!} \cdot 
+		\frac{1}{\sqrt{2 \pi} \lambda} e^{- \frac{1}{2} (\log \lambda - 1)^2} 
+		d\lambda.
+\end{equation}
+While this integral is not too difficult, it explains the problem of calculating 
+posteriors analytically. As the number of parameters (the length of $\Theta$) 
+increases, calculating the probability of the data requires evaluating integrals 
+in higher dimensional spaces. This is why we use alternative methods to derive 
+approximate versions of the posterior.
+
