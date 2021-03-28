@@ -74,7 +74,40 @@ the number~$b$ if for every $\epsilon > 0$, the following condition holds:
 \begin{equation}
     \lim_{n \to \infty} \pr (|Z_n - b| < \epsilon) = 1.
 \end{equation}
+This fact is denoted by $Z_n \convProb b$. 
 \end{definition} 
+
+\begin{theorem}[The Law of Large Numbers]\label{thm:lln}
+Let $X_1, \ldots, X_n$ be a random sample from a distribution with mean~$\mu$
+and finite variance~$\sigma^2$. Then the sample mean~$\bar{X}_n$ converges in 
+probability to~$\mu$.
+\end{theorem}
+\begin{proof}
+We have $\E [\bar{X}_n] = \mu$ and $\var (\bar{X}_n) = \sigma^2 / n$. Use 
+the Chebyschev inequality to obtain:
+\[
+    \pr (|\bar{X}_n - \mu| \leq t) \geq 1 - \frac{\sigma^2}{n t^2}.
+\]
+For every fixed $t > 0$, take limits as $n \to \infty$ to obtain:  
+$\lim_{n \to \infty} \pr (|\bar{X}_n - \mu| \leq t) = 1$. Hence $\bar{X} \convProb \mu$.
+\end{proof}
+
+If we know that a sequence of random variables converges in probability, what 
+can we say about continuous functions of that sequence of random variables?
+\begin{theorem}[Continuous Functions of Random Variables]
+Suppose a sequence $Z_1, Z_2, \ldots$ converges in probability to~$b$ and 
+that $g$ is a function continuous at~$b$. Then $g(Z_n) \convProb g(b)$.
+\end{theorem} 
+\begin{proof}
+We have to show $\lim_{n \to \infty} \pr (|g(Z_n) - g(b)| < \epsilon) = 1$. 
+Since $g$ is continuous at $b$, given $\epsilon > 0$ there exists $\delta > 0$
+such that $|z_n - b| < \delta$ implies $|g(z_n) -  g(b)| < \epsilon$. Now consider
+the events $\mathcal{E}_1 = \{ |Z_n - b| < \delta \}$ and 
+$\mathcal{E}_2 = \{|g(Z_n) - g(b)| < \epsilon\}$. Since $\mathcal{E}_1$ implies 
+$\mathcal{E}_2$, we have that $\pr (\mathcal{E}_2) \geq \pr (\mathcal{E}_1)$. 
+Since $\lim_{n \to \infty} \pr (\mathcal{E}_1) = 1$, we must have  
+$\lim_{n \to \infty} \pr (\mathcal{E}_2) = 1$. 
+\end{proof}
 
 \section{Maximum Likelihood Estimation}
 Let the random variables $X_1, \ldots, X_n$ form a random sample from a 
