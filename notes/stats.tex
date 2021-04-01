@@ -110,6 +110,61 @@ Since $\lim_{n \to \infty} \pr (\mathcal{E}_1) = 1$, we must have
 $\lim_{n \to \infty} \pr (\mathcal{E}_2) = 1$. 
 \end{proof}
 
+\begin{theorem}[Chernoff Bounds]
+Let $X$ be a random variable with moment generating function~$\psi_X$. 
+Then for any real $t$,
+\begin{equation} \label{ineq:chernoff}
+\pr (X \geq t) \leq \min_{s > 0} e^{- st} \psi_X(s).
+\end{equation}
+\end{theorem}
+\begin{proof}
+Fix $s > 0$. Since the map $x \longrightarrow e^x$ is 1-1 and increasing, we 
+have that $X \geq t$ if and only if $e^{sX} \geq e^{st}$. Therefore by the 
+Markov inequality, we obtain:
+\[
+    \pr (X \geq t) = \pr (e^{sX} \geq e^{st}) 
+        \leq \frac{\E [e^{sX}]}{e^{st}}
+        = e^{- s t} \psi_X(s).
+\] 
+This holds for any $s > 0$ and, in particular, when we minimize 
+$e^{- s t} \psi_X(s)$ subject to the condition that $s > 0$.
+\end{proof}
+
+
+\begin{example}
+For each positive integer~$n$, let $X_n$ be a nonnegative random variable 
+with finite mean $\mu_n$. Show that if $\lim_{n \to \infty} \mu_n = 0$, 
+then $X_n \convProb 0$.
+\begin{solution}
+We have to show that for every $\epsilon > 0$, 
+$\lim_{n \to \infty} \pr (X_n \geq \epsilon) = 0$. To this end, 
+fix $\epsilon > 0$ and $\delta > 0$. Since $\lim_{n \to \infty} \mu_n = 0$, there
+exists $n_{\epsilon \delta} \in \N$ such that for all $n \geq n_{\epsilon \delta}$, 
+$\mu_n < \epsilon \cdot \delta$. Combining this with the 
+Markov inequality, we obtain that for all $n \geq n_{\epsilon \delta}$ 
+\[
+    \pr (X_n \geq \epsilon) \leq \frac{\mu_n}{\epsilon} < \delta.
+\]
+This is precisely what we need to show in order to prove that 
+$\lim_{n \to \infty} \pr (X_n \geq \epsilon) = 0$.
+\end{solution}
+\end{example}
+
+\begin{example}
+Let $Z_1, Z_2, \ldots$ be a sequence of random variables, and suppose that,
+for $n = 1, 2, \ldots$, the distribution of $Z_n$ is as follows:
+\[
+    \pr (Z_n = n^2) = \frac{1}{n} \text{ and } \pr (Z_n = 0) = 1 - \frac{1}{n}.
+\] 
+Show that $\lim_{n \to \infty} \E [Z_n] = \infty$ but $Z_n \convProb 0$.
+\begin{solution}
+Now $\E [Z_n] = n^2 \cdot \frac{1}{n} = n$ and clearly $\E [Z_n] \to \infty$
+as $n \to \infty$. Since $\lim_{n \to \infty} \pr (Z_n = 0) = 1$, it follows 
+that for any $\epsilon > 0$, $\lim_{n \to \infty} \pr (Z_n > \epsilon) = 0$. 
+This shows that $Z_n \convProb 0$.
+\end{solution}
+\end{example}
+
 \section{Maximum Likelihood Estimation}
 Let the random variables $X_1, \ldots, X_n$ form a random sample from a 
 distribution with pdf~$f(x \mid \theta)$. Recall that this means that 

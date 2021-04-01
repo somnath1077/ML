@@ -1,6 +1,6 @@
 \documentclass[11pt,a4]{report}
 \usepackage{amsmath}
-\usepackage{amsthm}
+\usepackage{amsthm,amssymb}
 \usepackage{mathtools}
 \usepackage{url}
 \usepackage[left=2cm,right=2cm,top=3cm,bottom=2cm]{geometry}
@@ -28,10 +28,18 @@
 % Convergence related symbols
 \newcommand{\convProb}{\ensuremath{\stackrel{p}{\longrightarrow}}}
 
+% Basic Sets 
+\newcommand{\N}{\ensuremath{\mathbf{N}}}
+\newcommand{\R}{\ensuremath{\mathbf{R}}}
+\newcommand{\C}{\ensuremath{\mathbf{C}}}
+
 \newtheorem{theorem}{Theorem}[chapter]
 \theoremstyle{definition}
 \newtheorem{example}{Example}[chapter]
 \newtheorem{definition}{Definition}[chapter]
+\newenvironment{solution}
+  {\renewcommand\qedsymbol{$\blacksquare$}\begin{proof}[Solution]}
+  {\end{proof}}
 
 \title{ML Preparation Notes}
 
