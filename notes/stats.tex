@@ -103,8 +103,9 @@ We have to show $\lim_{n \to \infty} \pr (|g(Z_n) - g(b)| < \epsilon) = 1$.
 Since $g$ is continuous at $b$, given $\epsilon > 0$ there exists $\delta > 0$
 such that $|z_n - b| < \delta$ implies $|g(z_n) -  g(b)| < \epsilon$. Now consider
 the events $\mathcal{E}_1 = \{ |Z_n - b| < \delta \}$ and 
-$\mathcal{E}_2 = \{|g(Z_n) - g(b)| < \epsilon\}$. Since $\mathcal{E}_1$ implies 
-$\mathcal{E}_2$, we have that $\pr (\mathcal{E}_2) \geq \pr (\mathcal{E}_1)$. 
+$\mathcal{E}_2 = \{|g(Z_n) - g(b)| < \epsilon\}$. By the continuity of $g$, 
+$\mathcal{E}_1$ implies $\mathcal{E}_2$, and we have that 
+$\pr (\mathcal{E}_2) \geq \pr (\mathcal{E}_1)$. 
 Since $\lim_{n \to \infty} \pr (\mathcal{E}_1) = 1$, we must have  
 $\lim_{n \to \infty} \pr (\mathcal{E}_2) = 1$. 
 \end{proof}
