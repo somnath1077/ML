@@ -165,6 +165,57 @@ This shows that $Z_n \convProb 0$.
 \end{solution}
 \end{example}
 
+\section{The Central Limit Theorem}
+
+The CLT is a formal statmenet of how normal distributions can approximate 
+distributions of general sums or averages of iid random variables. To start with,
+consider the case when $X_1, \ldots, X_n$ are iid random variables with 
+$X_i \sim N(\mu_i, \sigma_i^2)$ for $1 \leq i \leq n$. Let $Y = a_1 X_1 + \cdots 
++ a_n X_n + b$, where $a_i \neq 0$ for at least one $1 \leq i \leq n$. Then $Y$ is 
+normally distributed as the following shows.
+
+\begin{theorem}
+Let $X_1, \ldots, X_n$ be iid normally distributed random variables with $X_i$ 
+having mean $\mu_i$ and variance $\sigma_i^2$, for $1 \leq i \leq n$. Define 
+$Y = a_1 X_1 + \cdots + a_n X_n + b$, where $a_i \neq 0$ for at least 
+one $1 \leq i \leq n$. Then $Y$ is normally distributed with mean 
+$a_1 \mu_1 + \cdots + a_n \mu_n + b$ and variance 
+$a_1^2 \mu_1^2 + \cdots + a_n^2 \mu_n^2$.  
+\end{theorem}
+\begin{proof}
+Let $\psi_i (t)$ be the mgf of $X_i$ for $1 \leq i \leq n$, and let 
+$\psi (t)$ denote the mgf of $a_1 X_1 + \cdots + a_n X_n + b$. Then 
+\begin{align*}
+	\psi (t) & = \E [ e^{t (a_1 X_1 + \cdots + a_n X_n + b)}] \\
+			 & = e^{t b} \cdot \prod_{i = 1}^{n} \E [e^{a_i X_i t}] \\
+			 & = e^{t b} \cdot \prod_{i = 1}^{n} \psi_i (a_i t) \\ 
+			 & = e^{t b} \cdot \prod_{i = 1}^{n} 
+			 		\exp \left ( a_i \mu_i t + \frac{1}{2} a_i^2 \sigma_i^2 t^2 
+			 		     \right ) \\
+			 & = \exp \left ( \left ( b + \sum_i \mu_i \right ) t + 
+							  \frac{1}{2} \left ( \sum_i a_i^2 \sigma_i^2 \right ) t^2 
+					  \right ). 
+\end{align*}
+Note that $\psi (t)$ is the mgf of a normal distribution with mean $b + \sum_i \mu_i$
+and variance $\sum_i a_i^2 \sigma_i^2$. Hence 
+$Y \sim N(b + \sum_i \mu_i, \sum_i a_i^2 \sigma_i^2)$.
+\end{proof}
+
+\begin{theorem}[Central Limit Theorem for IID RVs]
+Let $X_1, \ldots, X_n$ be iid random variables from a distribution with mean $\mu$
+and variance $\sigma^2 < \infty$. Then for each fixed number $x$,
+\begin{equation} \label{eqn:clt_iid}
+\lim_{n \to \infty} \pr \left ( \frac{\bar{X}_n - \mu}{\sigma / \sqrt{n} } \leq x \right ) = \Phi (x),
+\end{equation} 
+where $\Phi$ denotes the cdf of the standard normal distribution.
+\end{theorem}
+We can interpret Equation~\ref{eqn:clt_iid} as follows: If we have a large 
+random sample $X_1, \ldots, X_n$ from an arbitrary distribution (whether 
+discrete or continuous), the random variable $(\bar{X}_n - \mu) / (\sigma / \sqrt{n})$ 
+is distributed approximately as the standard normal. Consequently, $\bar{X}_n$ 
+is distributed approximately as $N(\mu, \sigma^2 / n)$ and $\sum_{i = 1}^n X_i$ 
+is distributed approximately as $N(n \mu, n \sigma^2)$.
+
 \section{Maximum Likelihood Estimation}
 Let the random variables $X_1, \ldots, X_n$ form a random sample from a 
 distribution with pdf~$f(x \mid \theta)$. Recall that this means that 
