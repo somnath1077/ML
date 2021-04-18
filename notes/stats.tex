@@ -148,6 +148,7 @@ Markov inequality, we obtain that for all $n \geq n_{\epsilon \delta}$
 This is precisely what we need to show in order to prove that 
 $\lim_{n \to \infty} \pr (X_n \geq \epsilon) = 0$.
 \end{solution}
+\eop 
 \end{example}
 
 \begin{example}
@@ -163,6 +164,7 @@ as $n \to \infty$. Since $\lim_{n \to \infty} \pr (Z_n = 0) = 1$, it follows
 that for any $\epsilon > 0$, $\lim_{n \to \infty} \pr (Z_n > \epsilon) = 0$. 
 This shows that $Z_n \convProb 0$.
 \end{solution}
+\eop 
 \end{example}
 
 \section{The Central Limit Theorem}
@@ -252,6 +254,7 @@ Take the derivative wrt~$\theta$ and set to $0$:
         \frac{n}{\theta} + \sum_i \log x_i \set 0
 \]
 to obtain that $\theta = n / \sum_i \log \frac{1}{x_i}$.
+\eop 
 \end{example}   
 
 \begin{example}
@@ -272,6 +275,7 @@ Maximizing $f_n$ is equivalent to minimizing $\sum_i |x_i - \theta|$. This
 is equivalent to obtaining a point on the real line that minimizes the sum 
 of the distances to the points $x_1, \ldots, x_n$. This happens when $\theta$
 is the median of $x_1, \ldots, x_n$.
+\eop 
 \end{example}
 
 \begin{example}\label{ex:stats:uniform}
@@ -287,6 +291,7 @@ log pdf of the joint distribution of $(X_1, \ldots, X_n)'$ is given by
 Maximizing the likelihood is equivalent to minimizing $\log (\theta_2 - \theta_1)$.
 The minimum possible value of $\theta_2$ is $\max \{x_1, \ldots, x_n\}$
 and the maximum possible value of $\theta_1$ is $\min \{x_1, \ldots, x_n\}$.
+\eop 
 \end{example}
 
 \begin{example}
@@ -319,6 +324,7 @@ from $1 \leq i \leq k - 1$, to obtain:
 \] 
 which yields $\theta_k = n_k / n$. Substitute this in $\theta_i / \theta_k = n_i / n_k$
 to obtain $\theta_i = n_i / n$.
+\eop
 \end{example} 
 
 \begin{example}[Nonexistence of an MLE]
@@ -341,6 +347,7 @@ $- n \log \theta$ as before and the MLE technique would require us to
 minimize $\log \theta$. However, in this case, there is no  
 $\theta > \max \{x_1, \ldots, x_n\}$ that mimimizes $\log \theta$ and the 
 MLE does not exist.    
+\eop 
 \end{example}
 
 \begin{example}[Non-uniqueness of an MLE]
@@ -364,6 +371,7 @@ may be written using the two conditions:
 \]
 Any value of $\theta$ in the interval $[\max \{x_1, \ldots, x_n \} - 1, 
 \min \{x_1, \ldots, x_n\}]$ is valid, but there is no unique value of $\theta$.
+\eop
 \end{example}
 
 \section{Bayesian Statistics and MCMC}
@@ -399,6 +407,37 @@ cases, one can dispense with computing integrals to find out the posterior.
 \begin{example}[Beta-Binomial] \label{ex:BetaBinomial}
 Let $X_1, \ldots, X_n \iid \text{Bernoulli}(\theta)$ and suppose that 
 $\theta \sim \text{Beta}(\alpha, \beta)$. Suppose that one observes $X_i = x_i$
-for $1 \leq i \leq n$. Then the posterior 
+for $1 \leq i \leq n$. Then the posterior distribution of $\theta$ is given by:
+\[
+    f( \theta \mid X_1, \ldots, X_n ) = 
+    \frac{f( X_1, \ldots, X_n \mid \theta) \cdot f(\theta)}{ f(X_1, \ldots, X_n)}.
+\]
+In the above expression, $f(X_1, \ldots, X_n)$ is a constant for a given set 
+of values of the random variables $X_i$. The likelihood, 
+when $X_i = x_i$ for $1 \leq i \leq n$, is given by:
+\begin{align*}
+    f( x_1, \ldots, x_n \mid \theta) 
+        & = \prod_{i = 1}^{n} \theta^{x_i} (1 - \theta)^{1 - x_i} \\
+        & = \theta^{\sum_i x_i} \cdot (1 - \theta)^{n - \sum_i x_i}.
+\end{align*}
+Now we may write:
+\begin{align*}
+    f( \theta \mid X_1, \ldots, X_n ) 
+        & = \frac{f( X_1, \ldots, X_n \mid \theta) \cdot f(\theta)}{ f(X_1, \ldots, X_n)} \\
+        & \propto \theta^{\sum_i x_i} \cdot (1 - \theta)^{n - \sum_i x_i} 
+                    \cdot \theta^{\alpha - 1} \cdot (1 - \theta)^{\beta - 1} \\
+        & \propto \theta^{\alpha + \sum_i x_i - 1} \cdot (1 - \theta)^{\beta + n - \sum_i x_i - 1}. 
+\end{align*}
+The last expression is the kernel of the beta distribution with parameters 
+$\alpha + \sum_i x_i$ and $\beta + n - \sum_i x_i$. Since the expression on the 
+right must be a valid probability distribution, the proportionality constant 
+must be that of the beta distribution with these parameters, that is, 
+\[
+    \frac{\Gamma(\alpha + \beta + n)}{\Gamma(\alpha + \sum_i x_i) \cdot \Gamma(\beta + n - \sum_i x_i)}.
+\]  
+\eop
 \end{example}  
 
+Thus if the prior is a beta distribution and the likelihood is a bernoulli distribution,
+then the posterior is a beta distribution also. Thus the set of beta distributions
+is a conjugate family wrt the bernoulli likelihood.   

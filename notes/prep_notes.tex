@@ -41,6 +41,11 @@
   {\renewcommand\qedsymbol{$\blacksquare$}\begin{proof}[Solution]}
   {\end{proof}}
 
+\newcommand\xqed[1]{%
+  \leavevmode\unskip\penalty9999 \hbox{}\nobreak\hfill
+  \quad\hbox{#1}}
+\newcommand\eop{\xqed{$\rhd$}}
+
 \title{ML Preparation Notes}
 
 \begin{document}
