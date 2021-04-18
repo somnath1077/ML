@@ -389,3 +389,16 @@ increases, calculating the probability of the data requires evaluating integrals
 in higher dimensional spaces. This is why we use alternative methods to derive 
 approximate versions of the posterior.
 
+In certain special cases, the posterior distribution can be easily derived. This 
+occurs, for example, when the prior distribution is from a so-called 
+\emph{conjugate prior} family. A conjugate prior family is a set of distributions
+defined wrt a likelihood function. If one chooses the prior to be from this 
+family, then the posterior is guaranteed to be from the same family. In such 
+cases, one can dispense with computing integrals to find out the posterior. 
+
+\begin{example}[Beta-Binomial] \label{ex:BetaBinomial}
+Let $X_1, \ldots, X_n \iid \text{Bernoulli}(\theta)$ and suppose that 
+$\theta \sim \text{Beta}(\alpha, \beta)$. Suppose that one observes $X_i = x_i$
+for $1 \leq i \leq n$. Then the posterior 
+\end{example}  
+
