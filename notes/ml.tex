@@ -2,5 +2,74 @@
 
 \chapter{Gradient Boosted Regression}
 
+We first consider gradient boosting for classification problems. Suppose that 
+we are given a dataset $\{(\vect{x}_i, y_i)_{i = 1}^{n}\}$, where 
+$\vect{x}_i \in \R^p$ and $y_i \in \{0, 1\}$. The problem is to find a mapping 
+$f \colon \vect{x} \to y$. As in logistic regression, we modify the problem 
+slightly and do not work directly with the class labels~$y_i$. Instead, we 
+consider the $\log (\text{odds})$ of the event $\pr \{y = 1 \mid \vect{x} \}$. 
+Since $- \infty < \log (\text{odds}) < + \infty$, this restatement allows us 
+to focus on functions~$F \colon \R^p \to \R$ rather than from 
+$\R^p \to \{0, 1\}$. This is helpful because gradient boosting requires 
+differentiable loss functions. 
+
+Our next step is to build an appropriate loss function. Let 
+$p = \pr \{y = 1 \mid \vect{x} \}$. Then we may write
+\[
+    \pr \{y \mid \vect{x} \} = p^y \cdot (1 - p)^{1 - y}.
+\] 
+Consequently, the likelihood of $y_1, \ldots, y_n$ given 
+$\vect{x}_1, \ldots, \vect{x}_n$ assuming that the data 
+$\{(\vect{x}_i, y_i)_{i = 1}^{n}\}$ are independent is
+\[
+    \pr \{y_1, \ldots, y_n \mid \vect{x}_1, \ldots, \vect{x}_n \} 
+        =   \prod_{i = 1}^{n} p_{i}^{y_i} \cdot (1 - p_i)^{1 - y_i}.
+\]
+The log-likelihood is $\sum_{i} \left [ y_i \log p_i + (1 - y_i) \log (1 - p_i) \right ]$. 
+If we were to fit a model such a logistic regression, we would search for 
+those model parameters for which the log-likelihood is a maximum. If we 
+were to use a transform of the log-likelihood as a loss function, we would
+want to minimize that transform. The easiest transform is the negative 
+log-likelihood. Minimizing the negative log-likelihood is equivalent to maximizing
+the log-likelihood (which is what we want to do). 
+This negative log-likelihood will then be our loss function and this also 
+goes by the name of \emph{cross entropy}.
+ 
+We re-write the loss function in terms of $\log (\text{odds})$ because this 
+is what our gradient boosting model will output. To simplify the resulting 
+expressions, we consider only one data point and omit the data index~$i$. 
+We may then write:
+\begin{align*}
+    - \left [ y \log p + (1 - y) \log (1 - p) \right ] 
+        & = - y \log p - (1 - y) \log (1 - p) \\
+        & = - y \log p + y \log (1 - p) - \log (1 - p) \\
+        & = - y \log \frac{p}{1 - p} - 
+                \log \left (1 - \sigma \left ( \log \frac{p}{1 - p} \right ) \right ).
+\end{align*}
+In the last step, we used the fact that $p = \sigma (p / (1 - p))$, where $\sigma$
+is the sigmoid function. This last step can be simplified by expanding out the 
+sigmoid function and the loss function can then be written as:
+\[
+    - y \log \frac{p}{1 - p} + \log (1 + e^{\log \frac{p}{1 - p}}).
+\]
+Note the positive sign before the logarithm. 
+
+Finally, we note that the gradient 
+boosting engine gives us a function $F(\vect{x})$ that represents the 
+$\log (\text{odds})$. With this, we can write the loss function more clearly as:
+\[
+    L(y, F(\vect{x})) = -y F(\vect{x}) + \log (1 + e^{F(\vect{x})}).
+\]
+This function is differentiable wrt $F(\vect{x})$ and with some manipulation, 
+one can show that:
+\[
+    \frac{\der L}{\der F(\vect{x})} = - y + \sigma (F(\vect{x})). 
+\]
+Now this has a nice interpretation. The term $\sigma (F(\vect{x}))$ is the 
+predicted probability that $y = 1$. If we were to interpret the label 
+$y \in \{0, 1\}$ as a probability, then the derivative of the loss function 
+wrt $F(\vect{x})$ is the negative of the difference of the actual probability 
+and the predicted probability. 
+
 \chapter{Neural Networks}
 
