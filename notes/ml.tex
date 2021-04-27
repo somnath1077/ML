@@ -15,16 +15,16 @@ differentiable loss functions.
 
 Our next step is to build an appropriate loss function. Let 
 $p = \pr \{y = 1 \mid \vect{x} \}$. Then we may write
-\[
+\begin{equation}
     \pr \{y \mid \vect{x} \} = p^y \cdot (1 - p)^{1 - y}.
-\] 
+\end{equation} 
 Consequently, the likelihood of $y_1, \ldots, y_n$ given 
 $\vect{x}_1, \ldots, \vect{x}_n$ assuming that the data 
 $\{(\vect{x}_i, y_i)_{i = 1}^{n}\}$ are independent is
-\[
+\begin{equation}
     \pr \{y_1, \ldots, y_n \mid \vect{x}_1, \ldots, \vect{x}_n \} 
         =   \prod_{i = 1}^{n} p_{i}^{y_i} \cdot (1 - p_i)^{1 - y_i}.
-\]
+\end{equation}
 The log-likelihood is $\sum_{i} \left [ y_i \log p_i + (1 - y_i) \log (1 - p_i) \right ]$. 
 If we were to fit a model such a logistic regression, we would search for 
 those model parameters for which the log-likelihood is a maximum. If we 
@@ -49,22 +49,22 @@ We may then write:
 In the last step, we used the fact that $p = \sigma (p / (1 - p))$, where $\sigma$
 is the sigmoid function. This last step can be simplified by expanding out the 
 sigmoid function and the loss function can then be written as:
-\[
+\begin{equation}
     - y \log \frac{p}{1 - p} + \log (1 + e^{\log \frac{p}{1 - p}}).
-\]
+\end{equation}
 Note the positive sign before the logarithm. 
 
 Finally, we note that the gradient 
 boosting engine gives us a function $F(\vect{x})$ that represents the 
 $\log (\text{odds})$. With this, we can write the loss function more clearly as:
-\[
+\begin{equation}
     L(y, F(\vect{x})) = -y F(\vect{x}) + \log (1 + e^{F(\vect{x})}).
-\]
+\end{equation}
 This function is differentiable wrt $F(\vect{x})$ and with some manipulation, 
 one can show that:
-\[
+\begin{equation}
     \frac{\der L}{\der F(\vect{x})} = - y + \sigma (F(\vect{x})). 
-\]
+\end{equation}
 Now this has a nice interpretation. The term $\sigma (F(\vect{x}))$ is the 
 predicted probability that $y = 1$. If we were to interpret the label 
 $y \in \{0, 1\}$ as a probability, then the derivative of the loss function 
@@ -78,28 +78,28 @@ We now consider the gradient boosting algorithm and go through it step by step.
     
     \item[Step~1.] Initialize model with a constant value $F_0(\vect{x})$ such
         that for all $\vect{x}_j$, $1 \leq j \leq n$,
-        \[
+        \begin{equation}
             F_0(\vect{x}_j) = \argmin_{\gamma} \sum_{i = 1}^{n} L(y_i, \gamma).
-        \]   
+        \end{equation}   
     \item[Step~2] For $m = 1$ to $M$ (the maximimum number of trees):
         \begin{enumerate}
             \item For each $i \in [1, \ldots, n]$, compute the pseudo residuals:
-                \[
+                \begin{equation}
                     r_{i m} = 
                             - \left [ 
                                 \frac{\partial L(y, F(\vect{x}))}{\partial F(\vect{x})} 
                               \right ]_{F(\vect{x}) = F_{m - 1}(\vect{x}), (\vect{x}_i, y_i)}.
-                \]
+                \end{equation}
             \item For each $i \in [1, \ldots, n]$, fit a regression tree to the 
                 $r_{i m}$ values and create terminal regions $R_{j m}$, where 
                 $j = 1, \ldots, J_m$, where $J_m$ is the number of leaves in the 
                 $m$th tree.
             \item For each $j \in [1, \ldots, J_m]$, compute an output value for 
                 leaf $j$ in tree $m$:
-                \[
+                \begin{equation}
                     \gamma_{j m} = \argmin_{\gamma} 
                             \sum_{\vect{x}_i \in R_{j m}} L(y_i, F_{m - 1}(\vect{x}_i) + \gamma).
-                \]
+                \end{equation}
             \item Update $F_m(\vect{x}) = F_{m - 1}(\vect{x}) + 
                 \nu \cdot \sum_{j = 1}^{J_m} \gamma_{j m} I(\vect{x} \in R_{j m})$.
         \end{enumerate}
@@ -108,21 +108,21 @@ We now consider the gradient boosting algorithm and go through it step by step.
 
 Step~1 asks us to initialize the model with a constant value~$\gamma$ which 
 is the solution to $\argmin_{\gamma} \sum_{i = 1}^{n} L(y_i, \gamma)$. Now, 
-\[
+\begin{equation}
     \sum_{i =1}^{n} L(y_i, \gamma) 
         = \sum_{i = 1}^n \left ( -y_i \gamma + \log (1 + e^{\gamma}) \right )
         = - \gamma \sum_{i = 1}^{n} y_i + n \cdot \log (1 + e^{\gamma}) 
         \defeq g(\gamma).
-\]
+\end{equation}
 Differentiating this wrt~$\gamma$, we obtain:
-\[
+\begin{equation}
     \frac{\der g}{\der \gamma} = - \sum_{i = 1}^n y_i + n \cdot \frac{e^{\gamma}}{1 + e^{\gamma}} 
         = - \sum_{i = 1}^n y_i + n \cdot \sigma(\gamma).  
-\]
+\end{equation}
 Setting the right hand expression above to $0$, we obtain:
-\[
+\begin{equation}
     \gamma = \log \frac{\bar{y}_n}{1 - \bar{y}_n}.
-\]
+\end{equation}
 Thus the initial constant solution is the $\log (\text{odds})$ of the mean 
 $\pr \{y = 1 \mid \vect{x} \}$ in the data. Intuitively, this seems like a good 
 initial solution to start out with.
@@ -133,12 +133,12 @@ algorithm and is determined using techniques such as cross-validation. The first
 step in this sequence asks us to compute ``residuals'' $r_{i m}$ for each data 
 point $(\vect{x}_i, y_i)$ and each tree. Computing the residuals amounts 
 to computing:
-\[
+\begin{equation}
     r_{i m} = - \left [ 
                         \frac{\partial L(y, F(\vect{x}))}{\partial F(\vect{x})} 
                 \right ]_{F(\vect{x}) = F_{m - 1}(\vect{x}), (\vect{x}_i, y_i)}
             = y_i - \sigma(F_{m - 1}(\vect{x}_i))
-\]  
+\end{equation}  
 Note that $F_{m - 1}(\vect{x})$ gives the $\log (\text{odds})$ of the event that 
 $y = 1$ given the data~$\vect{x}$. Hence $\sigma(F_{m - 1}(\vect{x}))$ represents 
 $\pr \{y = 1 \mid \vect{x} \}$. Consequently, $r_{im}$ is the difference between 
@@ -150,21 +150,22 @@ tree to fit these pseudo residual values. Suppose that the $m$th tree has $J_m$
 leaves. The third step determines an appropriate output value of each leaf of 
 the tree just constructed. The output value for the $j$th leaf of this tree 
 is:
-\[
+\begin{equation}
     \gamma_{j m} = \argmin_{\gamma} 
                             \sum_{\vect{x}_i \in R_{j m}} L(y_i, F_{m - 1}(\vect{x}_i) + \gamma).
-\] 
+\end{equation} 
 We could differentiate the above expression wrt~$\gamma$ but this is potentially very messy. 
 Instead, we simplify the loss function by using a second-order Taylor expansion. 
 In this context, recall that if $f \colon \R \to \R$ is a function that is infinitely
 differentiable at a point~$x$, then
-\[
+\begin{equation}
     f(x + h) \approx f(x) 
                         + \frac{f^{(1)}(x)}{1!} \cdot h 
                         + \frac{f^{(2)}(x)}{2!} \cdot h^{2} 
                         + \frac{f^{(3)}(x)}{3!} \cdot h^{3}
                         + \cdots.
-\]
+\end{equation}
+
 Using this, we can write a second-order approximation to our loss function:
 \begin{align*}
     L(y_i, F_{m - 1}(\vect{x}_i) + \gamma) 
@@ -176,18 +177,33 @@ Using this, we can write a second-order approximation to our loss function:
             + \frac{\gamma^2}{2} \cdot \sigma(F_{m - 1}(\vect{x}_i)) (1 - \sigma(F_{m - 1}(\vect{x}_i))).
 \end{align*}
 Differentiate the right-hand side wrt~$\gamma$ to obtain:
-\[
+\begin{equation}
     -y_i + \sigma(F_{m - 1}(\vect{x}_i) + \gamma \cdot \sigma(F_{m - 1}(\vect{x}_i)) (1 - \sigma(F_{m - 1}(\vect{x}_i))).
-\]
-Set this to $0$ to obtain the minimal value of $\gamma$:
-\[
-    \gamma = \frac{y_i - \sigma(F_{m - 1}(\vect{x}_i)}{\sigma(F_{m - 1}(\vect{x}_i)) (1 - \sigma(F_{m - 1}(\vect{x}_i)))}.
-\]
+\end{equation}
+Set this to $0$ and solve for $\gamma$:
+\begin{equation}
+    \gamma = \frac{y_i - \sigma(F_{m - 1}(\vect{x}_i)}{\sigma(F_{m - 1}(\vect{x}_i)) (1 - \sigma(F_{m - 1}(\vect{x}_i)))}
+           = \frac{y_i - p_i}{p_i (1 - p_i)}.
+\end{equation}
+
 This is the expression for just a single data point. Taking into account all data points, 
 we obtain:
+\begin{equation}
+\label{eqn:leaf_value}
+    \gamma = \frac{\sum_{i = 1}^{n} (y_i - \sigma(F_{m - 1}(\vect{x}_i))}{\sum_{i = 1}^{n}\sigma(F_{m - 1}(\vect{x}_i)) (1 - \sigma(F_{m - 1}(\vect{x}_i)))}
+           = \frac{\sum_i (y_i - p_i)}{\sum_i p_i (1 - p_i)}.
+\end{equation}
+%The numerator of Equation~\ref{eqn:leaf_value} is the sum of pseudo residuals. 
+%The denominator
+We can now evaluate the value~$\gamma_{j m}$ of each leaf node of the $m$th tree.
+The fourth and final step of Step~2 is to update the prediction function 
+$F_{m - 1}$ using the values of the leaf nodes of the tree just constructed.
 \[
-    \gamma = \frac{\sum_{i = 1}^{n} (y_i - \sigma(F_{m - 1}(\vect{x}_i))}{\sum_{i = 1}^{n}\sigma(F_{m - 1}(\vect{x}_i)) (1 - \sigma(F_{m - 1}(\vect{x}_i)))}.
-\]
+    F_{m}(\vect{x}) = F_{m - 1}(\vect{x}) + 
+            \nu \cdot \sum_{j = 1}^{J_m} \gamma_{j m} I(\vect{x} \in R_{j m}).
+\] 
+Step~3 simply outputs the function~$F_{M}$ obtained after the updation in the 
+$M$th round.
 
 \chapter{Neural Networks}
 
