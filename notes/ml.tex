@@ -87,8 +87,8 @@ We now consider the gradient boosting algorithm and go through it step by step.
                 \[
                     r_{i m} = 
                             - \left [ 
-                                \frac{\partial L(y_i, F(\vect{x}))}{\partial F(\vect{x})} 
-                              \right ]_{F(\vect{x}) = F_{m - 1}(\vect{x})}.
+                                \frac{\partial L(y, F(\vect{x}))}{\partial F(\vect{x})} 
+                              \right ]_{F(\vect{x}) = F_{m - 1}(\vect{x}), (\vect{x}_i, y_i)}.
                 \]
             \item For each $i \in [1, \ldots, n]$, fit a regression tree to the 
                 $r_{i m}$ values and create terminal regions $R_{j m}$, where 
@@ -105,5 +105,71 @@ We now consider the gradient boosting algorithm and go through it step by step.
         \end{enumerate}
     \item[Step~3] Return $F_M$.
 \end{description}
+
+Step~1 asks us to initialize the model with a constant value~$\gamma$ which 
+is the solution to $\argmin_{\gamma} \sum_{i = 1}^{n} L(y_i, \gamma)$. Now, 
+\[
+    \sum_{i =1}^{n} L(y_i, \gamma) 
+        = \sum_{i = 1}^n \left ( -y_i \gamma + \log (1 + e^{\gamma}) \right )
+        = - \gamma \sum_{i = 1}^{n} y_i + n \cdot \log (1 + e^{\gamma}) 
+        \defeq g(\gamma).
+\]
+Differentiating this wrt~$\gamma$, we obtain:
+\[
+    \frac{\der g}{\der \gamma} = - \sum_{i = 1}^n y_i + n \cdot \frac{e^{\gamma}}{1 + e^{\gamma}} 
+        = - \sum_{i = 1}^n y_i + n \cdot \sigma(\gamma).  
+\]
+Setting the right hand expression above to $0$, we obtain:
+\[
+    \gamma = \log \frac{\bar{y}_n}{1 - \bar{y}_n}.
+\]
+Thus the initial constant solution is the $\log (\text{odds})$ of the mean 
+$\pr \{y = 1 \mid \vect{x} \}$ in the data. Intuitively, this seems like a good 
+initial solution to start out with.
+
+Step~2 is where all the trees are constructed. There are $M$ trees in total and 
+this number has to be decided beforehand. In practice, this is a parameter to 
+algorithm and is determined using techniques such as cross-validation. The first 
+step in this sequence asks us to compute ``residuals'' $r_{i m}$ for each data 
+point $(\vect{x}_i, y_i)$ and each tree. Computing the residuals amounts 
+to computing:
+\[
+    r_{i m} = - \left [ 
+                        \frac{\partial L(y, F(\vect{x}))}{\partial F(\vect{x})} 
+                \right ]_{F(\vect{x}) = F_{m - 1}(\vect{x}), (\vect{x}_i, y_i)}
+            = y_i - \sigma(F_{m - 1}(\vect{x}_i))
+\]  
+Note that $F_{m - 1}(\vect{x})$ gives the $\log (\text{odds})$ of the event that 
+$y = 1$ given the data~$\vect{x}$. Hence $\sigma(F_{m - 1}(\vect{x}))$ represents 
+$\pr \{y = 1 \mid \vect{x} \}$. Consequently, $r_{im}$ is the difference between 
+the observed probability and the predicted probability. This looks very much 
+like the residuals as defined in linear regression. Thus the name ``pseudo residuals.''
+
+In the next step in the sequence for Step~2 is the construction of a regression 
+tree to fit these pseudo residual values. Suppose that the $m$th tree has $J_m$
+leaves. The third step determines an appropriate output value of each leaf of 
+the tree just constructed. The output value for the $j$th leaf of this tree 
+is:
+\[
+    \gamma_{j m} = \argmin_{\gamma} 
+                            \sum_{\vect{x}_i \in R_{j m}} L(y_i, F_{m - 1}(\vect{x}_i) + \gamma).
+\] 
+We could differentiate the above expression wrt~$\gamma$ but this is potentially very messy. 
+Instead, we simplify the loss function by using a second-order Taylor expansion. 
+In this context, recall that if $f \colon \R \to \R$ is a function that is infinitely
+differentiable at a point~$x$, then
+\[
+    f(x + h) \approx f(x) 
+                        + \frac{f^{(1)}(x)}{1!} \cdot h 
+                        + \frac{f^{(2)}(x)}{2!} \cdot h^{2} 
+                        + \frac{f^{(3)}(x)}{3!} \cdot h^{3}
+                        + \cdots
+\]
+which may be expressed as: 
+\[
+    \frac{f(x + h) - f(x)}{h} \approx f^{(1)}(x)
+                        + \frac{f^{(2)}(x)}{2} \cdot h 
+                        + \cdots
+\]
 \chapter{Neural Networks}
 
