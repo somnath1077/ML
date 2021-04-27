@@ -163,13 +163,31 @@ differentiable at a point~$x$, then
                         + \frac{f^{(1)}(x)}{1!} \cdot h 
                         + \frac{f^{(2)}(x)}{2!} \cdot h^{2} 
                         + \frac{f^{(3)}(x)}{3!} \cdot h^{3}
-                        + \cdots
+                        + \cdots.
 \]
-which may be expressed as: 
+Using this, we can write a second-order approximation to our loss function:
+\begin{align*}
+    L(y_i, F_{m - 1}(\vect{x}_i) + \gamma) 
+            & \approx L(y_i, F_{m - 1}(\vect{x}_i)) 
+            + \gamma \cdot \frac{\der L(y_i, F_{m - 1}(\vect{x}_i))}{\der F_{m-1}} 
+            + \frac{\gamma^2}{2} \cdot \frac{\der^2 L(y_i, F_{m - 1}(\vect{x}_i))}{\der F_{m-1}^2} \\
+            & = L(y_i, F_{m - 1}(\vect{x}_i)) 
+            + \gamma \cdot (-y_i + \sigma(F_{m - 1}(\vect{x}_i)) 
+            + \frac{\gamma^2}{2} \cdot \sigma(F_{m - 1}(\vect{x}_i)) (1 - \sigma(F_{m - 1}(\vect{x}_i))).
+\end{align*}
+Differentiate the right-hand side wrt~$\gamma$ to obtain:
 \[
-    \frac{f(x + h) - f(x)}{h} \approx f^{(1)}(x)
-                        + \frac{f^{(2)}(x)}{2} \cdot h 
-                        + \cdots
+    -y_i + \sigma(F_{m - 1}(\vect{x}_i) + \gamma \cdot \sigma(F_{m - 1}(\vect{x}_i)) (1 - \sigma(F_{m - 1}(\vect{x}_i))).
 \]
+Set this to $0$ to obtain the minimal value of $\gamma$:
+\[
+    \gamma = \frac{y_i - \sigma(F_{m - 1}(\vect{x}_i)}{\sigma(F_{m - 1}(\vect{x}_i)) (1 - \sigma(F_{m - 1}(\vect{x}_i)))}.
+\]
+This is the expression for just a single data point. Taking into account all data points, 
+we obtain:
+\[
+    \gamma = \frac{\sum_{i = 1}^{n} (y_i - \sigma(F_{m - 1}(\vect{x}_i))}{\sum_{i = 1}^{n}\sigma(F_{m - 1}(\vect{x}_i)) (1 - \sigma(F_{m - 1}(\vect{x}_i)))}.
+\]
+
 \chapter{Neural Networks}
 
