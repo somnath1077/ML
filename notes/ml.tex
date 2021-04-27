@@ -154,6 +154,10 @@ is:
     \gamma_{j m} = \argmin_{\gamma} 
                             \sum_{\vect{x}_i \in R_{j m}} L(y_i, F_{m - 1}(\vect{x}_i) + \gamma).
 \end{equation} 
+This asks us to find that value of~$\gamma$ such that, when added to the 
+$\log (\text{odds})$ value of the previous prediction, the sum of the losses
+is minimized.
+  
 We could differentiate the above expression wrt~$\gamma$ but this is potentially very messy. 
 Instead, we simplify the loss function by using a second-order Taylor expansion. 
 In this context, recall that if $f \colon \R \to \R$ is a function that is infinitely
@@ -165,7 +169,6 @@ differentiable at a point~$x$, then
                         + \frac{f^{(3)}(x)}{3!} \cdot h^{3}
                         + \cdots.
 \end{equation}
-
 Using this, we can write a second-order approximation to our loss function:
 \begin{align*}
     L(y_i, F_{m - 1}(\vect{x}_i) + \gamma) 
