@@ -2,6 +2,61 @@
 
 \chapter{Gradient Boosted Regression}
 
+Gradient boosting is a technique where a sequence 
+$F_0, \ldots, F_M$ of decision trees are constructed where 
+each tree $F_m$ in the sequence is fit to the errors of the 
+predictor obtained from the trees that precede it. The predictor obtained 
+from a sequence of trees $F_0, \ldots, F_{m - 1}$ takes an additive 
+form:
+\begin{equation}
+    F_0(\vect{x}) + \nu \cdot \sum_{j = 1}^{m - 1} F_j(\vect{x}),
+\end{equation}  
+where $\nu$ is the learning rate. 
+
+\section{Gradient Boosting for Regression}
+\begin{figure}[ht]
+{\small
+\begin{description}
+    \item[Input.] A dataset $\{(\vect{x}_i, y_i)_{i = 1}^{n}\}$ and a 
+        differentiable loss function $L(y, F(\vect{x}))$.
+    
+    \item[Step~1.] Initialize model with a constant value $F_0(\vect{x})$ such
+        that for all $\vect{x}_j$, $1 \leq j \leq n$,
+        \begin{equation}
+            F_0(\vect{x}_j) = \argmin_{\gamma} \sum_{i = 1}^{n} L(y_i, \gamma).
+        \end{equation}   
+    \item[Step~2] For $m = 1$ to $M$ (the maximimum number of trees):
+        \begin{enumerate}
+            \item For each $i \in [1, \ldots, n]$, compute the pseudo residuals:
+                \begin{equation}
+                    r_{i m} = 
+                            - \left [ 
+                                \frac{\partial L(y, F(\vect{x}))}{\partial F(\vect{x})} 
+                              \right ]_{F(\vect{x}) = F_{m - 1}(\vect{x}), (\vect{x}_i, y_i)}.
+                \end{equation}
+            \item For each $i \in [1, \ldots, n]$, fit a regression tree to the 
+                $r_{i m}$ values and create terminal regions $R_{j m}$, where 
+                $j = 1, \ldots, J_m$, where $J_m$ is the number of leaves in the 
+                $m$th tree.
+            \item For each $j \in [1, \ldots, J_m]$, compute an output value for 
+                leaf $j$ in tree $m$:
+                \begin{equation}
+                    \gamma_{j m} = \argmin_{\gamma} 
+                            \sum_{\vect{x}_i \in R_{j m}} L(y_i, F_{m - 1}(\vect{x}_i) + \gamma).
+                \end{equation}
+            \item Update $F_m(\vect{x}) = F_{m - 1}(\vect{x}) + 
+                \nu \cdot \sum_{j = 1}^{J_m} \gamma_{j m} I(\vect{x} \in R_{j m})$.
+        \end{enumerate}
+    \item[Step~3] Return $F_M$.
+\end{description}
+}
+ \caption{The Gradient Boosted Algorithm.}
+\label{fig:gbm_algo}
+\end{figure}
+
+
+\section{Gradient Boosting for Classification}
+
 We first consider gradient boosting for classification problems. Suppose that 
 we are given a dataset $\{(\vect{x}_i, y_i)_{i = 1}^{n}\}$, where 
 $\vect{x}_i \in \R^p$ and $y_i \in \{0, 1\}$. The problem is to find a mapping 
@@ -72,40 +127,6 @@ wrt $F(\vect{x})$ is the negative of the difference of the actual probability
 and the predicted probability. 
 
 We now consider the gradient boosting algorithm and go through it step by step. 
-\begin{description}
-    \item[Input.] A dataset $\{(\vect{x}_i, y_i)_{i = 1}^{n}\}$ and a 
-        differentiable loss function $L(y, F(\vect{x}))$.
-    
-    \item[Step~1.] Initialize model with a constant value $F_0(\vect{x})$ such
-        that for all $\vect{x}_j$, $1 \leq j \leq n$,
-        \begin{equation}
-            F_0(\vect{x}_j) = \argmin_{\gamma} \sum_{i = 1}^{n} L(y_i, \gamma).
-        \end{equation}   
-    \item[Step~2] For $m = 1$ to $M$ (the maximimum number of trees):
-        \begin{enumerate}
-            \item For each $i \in [1, \ldots, n]$, compute the pseudo residuals:
-                \begin{equation}
-                    r_{i m} = 
-                            - \left [ 
-                                \frac{\partial L(y, F(\vect{x}))}{\partial F(\vect{x})} 
-                              \right ]_{F(\vect{x}) = F_{m - 1}(\vect{x}), (\vect{x}_i, y_i)}.
-                \end{equation}
-            \item For each $i \in [1, \ldots, n]$, fit a regression tree to the 
-                $r_{i m}$ values and create terminal regions $R_{j m}$, where 
-                $j = 1, \ldots, J_m$, where $J_m$ is the number of leaves in the 
-                $m$th tree.
-            \item For each $j \in [1, \ldots, J_m]$, compute an output value for 
-                leaf $j$ in tree $m$:
-                \begin{equation}
-                    \gamma_{j m} = \argmin_{\gamma} 
-                            \sum_{\vect{x}_i \in R_{j m}} L(y_i, F_{m - 1}(\vect{x}_i) + \gamma).
-                \end{equation}
-            \item Update $F_m(\vect{x}) = F_{m - 1}(\vect{x}) + 
-                \nu \cdot \sum_{j = 1}^{J_m} \gamma_{j m} I(\vect{x} \in R_{j m})$.
-        \end{enumerate}
-    \item[Step~3] Return $F_M$.
-\end{description}
-
 Step~1 asks us to initialize the model with a constant value~$\gamma$ which 
 is the solution to $\argmin_{\gamma} \sum_{i = 1}^{n} L(y_i, \gamma)$. Now, 
 \begin{equation}
