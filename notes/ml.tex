@@ -28,7 +28,48 @@ correlation~$\rho$, then the variance of the sample mean is:
 Again, as $n$ increases, the variance of the estimator decreases. Therefore a 
 natural way to reduce the variance of a predictor is to use several data sets 
 from the population, fit a predictor to each of these data sets and then take 
-the average of these predictions. 
+the average of these predictions.
+
+Of course, in practice, we do not have access to multiple data sets. So what is 
+done is that several random samples are selected from a single training data set. 
+This procedure is called bootstrapping. Given a training data set with $n$ 
+data points, one creates a bootstrapped data set by sampling $n$ times 
+from the training data \emph{with replacement}. One generates multiple bootstrapped
+data sets and then trains decision trees on each of these data sets. Let's 
+assume that there are $M$ such bootstrapped data sets and that $\hat{f}_{i}$ 
+is the decision tree obtained by training on the $i$th set. In case of regression
+problems, the predicted response given a data point $\vect{x}$ is:
+\[
+    \hat{f}_{\text{bag}} (\vect{x}) = \frac{1}{M} \sum_{i = 1}^{M} \hat{f}_{i} (\vect{x}).
+\]   
+If the problem is a classiffication problem, the predicted class is the one that 
+is predicted most often by the trees. 
+
+Using bootstrapped samples to fit decision trees has one clear benefit in that 
+estimating the test error of the bagged model becomes very easy. In particular, 
+one does not need to use cross-validation. This follows from the observation 
+that each bootstrapped data set omits approximately $1/3$ of the data points 
+from the training set. The data points that are left out of a given bootstrapped sample are called 
+the \emph{out-of-bag} samples. In order to estimate the test error of the 
+tree fit to this bootstrapped sample, one simply needs to find out the error 
+on the out-of-bag samples. To see why, on average, $1/3$ of the data points 
+are left out, consider a training data set $\{(\vect{x}_i, y_i)\}_{i = 1}^{n}$ 
+with $n$ elements. The probability that the $i$th datum is \emph{not} selected 
+in our bootstrapped sample~$S$ is
+\[
+    \pr ((\vect{x}_i, y_i) \notin S) = \left ( 1 - \frac{1}{n} \right )^{n} \defeq p_i.
+\]  
+define $Z_i = 1$ if $(\vect{x}_i, y_i) \in S$ and otherwise $0$. Then 
+$\sum_i Z_i$ is the number of elements of the training set that are not in $S$.
+The expectation of $\sum_i Z_i$ is given by: 
+\[
+    \E \left [ \sum_i Z_i \right ] 
+        = \sum_i \left ( p_i \cdot 1 + (1 - p_i) \cdot 0 \right ) 
+        = n \cdot \left ( 1 - \frac{1}{n} \right )^{n} \approx n \cdot e^{-1}
+        = 0.37 n.
+\]
+
+ 
 \chapter{Gradient Boosted Regression}
 
 Gradient boosting is a technique where a sequence 
