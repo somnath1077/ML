@@ -97,7 +97,10 @@ to that leaf node. The final step of Step~2 is to update the $m$th predictor
 using the most recently constructed tree.  
 
 Finally, Step~3 simply returns the updated predictor from the very last iteration
-in Step~2.
+in Step~2. To make a prediction at a new point $\vect{x}$, we output:
+\[
+    F_0(\vect{x}) + \nu \cdot F_1(\vect{x}) + \cdots + \nu \cdot F_M(\vect{x}).
+\]
 
 \begin{figure}[th!]
 {\small
@@ -314,7 +317,14 @@ $F_{m - 1}$ using the values of the leaf nodes of the tree just constructed.
             \nu \cdot \sum_{j = 1}^{J_m} \gamma_{j m} I(\vect{x} \in R_{j m}).
 \] 
 Step~3 simply outputs the function~$F_{M}$ obtained after the updation in the 
-$M$th round.
+$M$th round. To make a prediction at a new point $\vect{x}$, we first compute
+the $\log (\text{odds})$:
+\[
+    F_0(\vect{x}) + \nu \cdot F_1(\vect{x}) + \cdots + \nu \cdot F_M(\vect{x}).
+\]
+Using this, we compute the probability $\sigma(\log (\text{odds}))$ that the 
+corresponding label is a $1$. If this probability exceeds a threshold, which 
+is usually set to $0.5$, then we output a $1$; otherwise, we output a $0$.  
 
 \chapter{Neural Networks}
 
