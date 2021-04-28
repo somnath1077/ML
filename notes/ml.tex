@@ -7,17 +7,98 @@ $F_0, \ldots, F_M$ of decision trees are constructed where
 each tree $F_m$ in the sequence is fit to the errors of the 
 predictor obtained from the trees that precede it. The predictor obtained 
 from a sequence of trees $F_0, \ldots, F_{m - 1}$ takes an additive 
-form:
+form and given an input~$\vect{x}$, the predicted output is:
 \begin{equation}
     F_0(\vect{x}) + \nu \cdot \sum_{j = 1}^{m - 1} F_j(\vect{x}),
 \end{equation}  
-where $\nu$ is the learning rate. 
+where $\nu$ is the learning rate. This is different from ensemble methods 
+such as random forests in that, in the latter, the prediction is the mean predicted 
+value over all the learners in the ensemble. 
+
+This technique can be used for both regression and classification. We first look
+at regression as the presentation is slightly easier.
 
 \section{Gradient Boosting for Regression}
-\begin{figure}[ht]
+Consider a regression problem where given $\{ (\vect{x}_i, y_i)\}_{i = 1}^n$, 
+where $\vect{x}_i \in \R^p$ and $y_i \in \R$, we wish to find out 
+$F \colon \R^p \to \R$ from an appropriate hypothesis class 
+such that $F(\vect{x}_i) \approx y_i$ minimizing some 
+loss function. The loss function typically used in regression is squared loss
+and for a single data point is defined as:
+\begin{equation}  
+    \label{eqn:sq_loss_single}
+    L(y_i, F(\vect{x}_i)) = \frac{1}{2} (y_i - F(\vect{x}_i))^2. 
+\end{equation}
+The loss for the entire data set is:
+\begin{equation}
+    \label{eqn:sq_loss_total}
+    L(F) = \frac{1}{2} \sum_{i = 1}^{n} (y_i - F(\vect{x}_i))^2.
+\end{equation}
+
+Gradient boosting requires loss functions that are differentiable and squared loss
+is one such function. Although taking derivates wrt~$F$ 
+in Equation~\ref{eqn:sq_loss_total} is trivial, it does provide a useful insight.
+\begin{equation}
+    \frac{\der L(F)}{\der F} 
+        = - \sum_{i = 1}^n (y_i - F(\vect{x}_i))   
+\end{equation}
+The derivative is the \emph{negative} of the sum of the residuals. This fact 
+will be important as we work through the algorithm.
+
+The algorithm itself is presented in Figure~\ref{fig:gbm_algo}. Step~1 of the 
+algorithm asks us to initialize the model with a constant value~$F_0$ 
+to be computed using:
+\begin{equation}
+        F_0 
+        = \argmin_{\gamma} \sum_{i = 1}^{n} (y_i - \gamma)^2
+        = \argmin_{\gamma} \sum_{i = 1}^{n} (y_i^2 - 2 y_i \gamma + \gamma^2)
+        \defeq \argmin_{\gamma} g(\gamma)
+\end{equation}
+Differentiating wrt~$\gamma$ and then setting the resulting expression to $0$
+yields:
+\[
+    \frac{\der g}{\der \gamma} = \sum_{i = 1}^{n} (-2 y_i + 2 \gamma) \set 0
+    \Rightarrow \gamma = \frac{\sum_{i = 1}^{n} y_i}{n} = \bar{y}_n.
+\]
+Thus the inital prediction is simply the mean of the response. This seems 
+like the intuitive thing to do. 
+
+Step~2 is where the sequence of trees is constructed. In each iteration, 
+the algorithm constructs a new tree based on the residuals of the previous 
+predictor. There are $M$ iterations in total resulting in $M$ trees. 
+In practice, this is a parameter to algorithm and is determined using techniques 
+such as cross-validation. The first step in this sequence is to compute the 
+``pseudo residuals'' $r_{i m}$ for each data point using 
+Equation~\ref{eqn:pseudo_residuals}. Since our loss function 
+is the squared loss, we see that $r_{im}$ evaluates to: 
+\[
+    r_{i m} = y_i - F_{m - 1}(\vect{x}_i).
+\] 
+This is exactly the residual as defined in linear regression. In the context 
+of gradient boosting, the term pseudo residual is used to remind us that we 
+are not working with linear regression.
+
+The second step in the sequence for Step~2 is the construction of a regression 
+tree to fit the residuals $r_{i m}$ that were computed. Assume that the $m$th 
+tree has leaf nodes $R_{j m}$, where $1 \leq j \leq J_m$. The next step asks 
+us to compute the values of these leaf nodes. Differentiating wrt~$\gamma$ 
+in Equation~\ref{eqn:leaf_values} and setting to $0$, we obtain that
+\begin{equation}
+    \gamma_{j m} 
+        = \frac{1}{| \{ x_i \in R_{j m} \} |} \sum_{x_i \in R_{j m}} (y_i - F_{m - 1}(x_i)).
+\end{equation}
+Again this has an intuitive interpretation. The value of the $j$th leaf in the 
+$m$th tree is the mean residual value of all the data points that trickle down
+to that leaf node. The final step of Step~2 is to update the $m$th predictor 
+using the most recently constructed tree.  
+
+Finally, Step~3 simply returns the updated predictor from the very last iteration
+in Step~2.
+
+\begin{figure}[th!]
 {\small
 \begin{description}
-    \item[Input.] A dataset $\{(\vect{x}_i, y_i)_{i = 1}^{n}\}$ and a 
+    \item[Input.] A dataset $\{(\vect{x}_i, y_i)\}_{i = 1}^{n}$ and a 
         differentiable loss function $L(y, F(\vect{x}))$.
     
     \item[Step~1.] Initialize model with a constant value $F_0(\vect{x})$ such
@@ -25,10 +106,10 @@ where $\nu$ is the learning rate.
         \begin{equation}
             F_0(\vect{x}_j) = \argmin_{\gamma} \sum_{i = 1}^{n} L(y_i, \gamma).
         \end{equation}   
-    \item[Step~2] For $m = 1$ to $M$ (the maximimum number of trees):
+    \item[Step~2] For $m = 1$ to $M$ (the maximum number of trees):
         \begin{enumerate}
             \item For each $i \in [1, \ldots, n]$, compute the pseudo residuals:
-                \begin{equation}
+                \begin{equation} \label{eqn:pseudo_residuals}
                     r_{i m} = 
                             - \left [ 
                                 \frac{\partial L(y, F(\vect{x}))}{\partial F(\vect{x})} 
@@ -41,6 +122,7 @@ where $\nu$ is the learning rate.
             \item For each $j \in [1, \ldots, J_m]$, compute an output value for 
                 leaf $j$ in tree $m$:
                 \begin{equation}
+                    \label{eqn:leaf_values}
                     \gamma_{j m} = \argmin_{\gamma} 
                             \sum_{\vect{x}_i \in R_{j m}} L(y_i, F_{m - 1}(\vect{x}_i) + \gamma).
                 \end{equation}
@@ -57,7 +139,7 @@ where $\nu$ is the learning rate.
 
 \section{Gradient Boosting for Classification}
 
-We first consider gradient boosting for classification problems. Suppose that 
+We next consider gradient boosting for classification problems. Suppose that 
 we are given a dataset $\{(\vect{x}_i, y_i)_{i = 1}^{n}\}$, where 
 $\vect{x}_i \in \R^p$ and $y_i \in \{0, 1\}$. The problem is to find a mapping 
 $f \colon \vect{x} \to y$. As in logistic regression, we modify the problem 
@@ -126,7 +208,8 @@ $y \in \{0, 1\}$ as a probability, then the derivative of the loss function
 wrt $F(\vect{x})$ is the negative of the difference of the actual probability 
 and the predicted probability. 
 
-We now consider the gradient boosting algorithm and go through it step by step. 
+We now go through the gradient boosting algorithm in Figure~\ref{fig:gbm_algo} 
+step by step, this time for a binary classification problem. 
 Step~1 asks us to initialize the model with a constant value~$\gamma$ which 
 is the solution to $\argmin_{\gamma} \sum_{i = 1}^{n} L(y_i, \gamma)$. Now, 
 \begin{equation}
