@@ -1,4 +1,4 @@
-\chapter{Trees, Boosting and Random Forests}
+\chapter{Trees, Bagging and Random Forests}
 
 Random forests are built using decision trees. Decision trees are easy to 
 build, easy to use and interpret but they are prone to overfitting. 
@@ -49,11 +49,12 @@ Using bootstrapped samples to fit decision trees has one clear benefit in that
 estimating the test error of the bagged model becomes very easy. In particular, 
 one does not need to use cross-validation. This follows from the observation 
 that each bootstrapped data set omits approximately $1/3$ of the data points 
-from the training set. The data points that are left out of a given bootstrapped sample are called 
-the \emph{out-of-bag} samples. In order to estimate the test error of the 
-tree fit to this bootstrapped sample, one simply needs to find out the error 
-on the out-of-bag samples. To see why, on average, $1/3$ of the data points 
-are left out, consider a training data set $\{(\vect{x}_i, y_i)\}_{i = 1}^{n}$ 
+from the training set. The data points that are left out of a given bootstrapped 
+sample are called the \emph{out-of-bag} samples. In order to estimate the test 
+error of the tree fit to this bootstrapped sample, one simply needs to find out 
+the error on the out-of-bag samples. To see why, on average, $1/3$ of the data 
+points are left out, consider a training data set 
+$\{(\vect{x}_i, y_i)\}_{i = 1}^{n}$ 
 with $n$ elements. The probability that the $i$th datum is \emph{not} selected 
 in our bootstrapped sample~$S$ is
 \[
@@ -68,6 +69,10 @@ The expectation of $\sum_i Z_i$ is given by:
         = n \cdot \left ( 1 - \frac{1}{n} \right )^{n} \approx n \cdot e^{-1}
         = 0.37 n.
 \]
+
+All of this is good but training decision trees on bootstrapped data sets 
+still produce predictors that are correlated. Random forests make use of another 
+small tweak to decorrelate the predictors.  
 
  
 \chapter{Gradient Boosted Regression}
