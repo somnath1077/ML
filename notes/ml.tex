@@ -15,21 +15,10 @@ The general principle behind bagging is easy enough to see. Let
 $X_1, \ldots, X_n$ be iid random variables from a distribution with mean $\mu$
 and variance $\sigma^2$. If we use the sample mean $\bar{X}_n$ as an estimate 
 of $\mu$, the variance is $\sigma^2 / n$. As $n$ increases, the variance 
-decreases. Even if we drop the assumption of independence and simply assume 
-that the variables $X_i$ are identically distributed with a positive pairwise 
-correlation~$\rho$, then the variance of the sample mean is:
-\begin{align*}
-    \var (\bar{X}_n) & = \var \left ( \frac{1}{n} \sum_{i = 1}^{n} X_i \right ) \\
-                     & = \frac{1}{n^2} \left ( \sum_{i = 1}^{n} \var (X_i) + 2 \sum_{1 \leq i < j \leq n} \cov (X_i, X_j)\right ) \\
-                     & = \frac{1}{n^2} \left ( n \sigma^2 + 2 \cdot {n \choose 2} \rho \sigma^2 \right ) \\
-                     & = \frac{\sigma^2}{n} + \frac{n - 1}{n} \rho \sigma^2 \\
-                     & = \rho \sigma^2 + (1 - \rho) \frac{\sigma^2}{n}.
-\end{align*}
-Again, as $n$ increases, the variance of the estimator decreases. Therefore a 
+decreases.  Therefore a 
 natural way to reduce the variance of a predictor is to use several data sets 
 from the population, fit a predictor to each of these data sets and then take 
 the average of these predictions.
-
 Of course, in practice, we do not have access to multiple data sets. So what is 
 done is that several random samples are selected from a single training data set. 
 This procedure is called bootstrapping. Given a training data set with $n$ 
@@ -71,9 +60,63 @@ The expectation of $\sum_i Z_i$ is given by:
 \]
 
 All of this is good but training decision trees on bootstrapped data sets 
-still produce predictors that are correlated. Random forests make use of another 
-small tweak to decorrelate the predictors.  
+still produce predictors that are correlated. This situation corresponds to 
+having random variables $X_1, \ldots, X_n$ that are identically distributed 
+with a positive pairwise correlation~$\rho$. The variance of the sample mean 
+in this situation is:
+\begin{align*}
+    \var (\bar{X}_n) & = \var \left ( \frac{1}{n} \sum_{i = 1}^{n} X_i \right ) \\
+                     & = \frac{1}{n^2} \left ( \sum_{i = 1}^{n} \var (X_i) + 2 \sum_{1 \leq i < j \leq n} \cov (X_i, X_j)\right ) \\
+                     & = \frac{1}{n^2} \left ( n \sigma^2 + 2 \cdot {n \choose 2} \rho \sigma^2 \right ) \\
+                     & = \frac{\sigma^2}{n} + \frac{n - 1}{n} \rho \sigma^2 \\
+                     & = \rho \sigma^2 + (1 - \rho) \frac{\sigma^2}{n}.
+\end{align*}
+As $n$ increases, the second term vanishes, but the first remains and the 
+correlation limits the advantages of averaging. 
 
+Random forests try to reduce this correlation by making use of a small tweak 
+when splitting nodes of the trees (Figure~\ref{fig:random_forest}). 
+As in bagging, one builds a number 
+of decision trees on bootstrapped data sets. The difference is that each time
+a split in a tree is considered, a \emph{random subset} of $k$ predictors are 
+used from the total set of $p$ predictors. The split is then based on only one 
+of these~$k$ predictors that were selected. A fresh sample of~$k$ predictors 
+is taken for each split in each tree. The initial value of~$k$ is~$\sqrt{p}$ 
+and finally decided using cross validation.    
+
+\begin{figure}[!ht]
+{\small
+\begin{description}
+\item[Input.] A data set $\{(\vect{x}_i, y_i)\}_{i = 1}^{n}$, where $\vect{x}_i \in \R^p$; 
+a minimum node size~$n_{\min}$; the number of trees in the forest~$M$; 
+the number~$k$ of predictors to pick at each split. 
+
+\item[Step~1.] For $i = 1$ to $M$:
+\begin{enumerate}
+    \item Draw a bootstrap sample of size~$n$ from the training data set.
+    \item Construct a decision tree $T_i$ to the bootstrapped data by recursively 
+        repeating the steps for each leaf node, till the minimum node 
+        size~$n_{\min}$ is reached.
+    \begin{enumerate}
+        \item Select~$k$ predictors randomly from among the set of~$p$ predictors. 
+        \item Pick the best predictor to make the split.
+        \item Split the node into two child nodes.
+    \end{enumerate}
+\end{enumerate}
+
+\item[Step~2.] Output the ensemble of trees $\{ T_i \}_{i = 1}^M$
+\end{description}
+
+To make a prediction at a new point~$\vect{x}$:
+\begin{description}
+    \item[Regression.] $\hat{f}(\vect{x}) = \frac{1}{M} \sum_{i = 1}^{M} T_i(\vect{x})$. 
+    \item[Classification.] Let $\hat{C}_i(\vect{x})$ be the class prediction of 
+        the $i$th tree. Then $\hat{C}(\vect{x}) = \text{majority vote } \{ \hat{C}_i(\vect{x})\}$.  
+\end{description}
+}
+\caption{The Random Forest Algorithm.}
+\label{fig:random_forest}
+\end{figure}
  
 \chapter{Gradient Boosted Regression}
 
@@ -176,15 +219,16 @@ in Step~2. To make a prediction at a new point $\vect{x}$, we output:
 \begin{figure}[th!]
 {\small
 \begin{description}
-    \item[Input.] A dataset $\{(\vect{x}_i, y_i)\}_{i = 1}^{n}$ and a 
-        differentiable loss function $L(y, F(\vect{x}))$.
+    \item[Input.] A dataset $\{(\vect{x}_i, y_i)\}_{i = 1}^{n}$, a 
+        differentiable loss function $L(y, F(\vect{x}))$ and 
+        the number of trees to be constructed~$M$
     
     \item[Step~1.] Initialize model with a constant value $F_0(\vect{x})$ such
         that for all $\vect{x}_j$, $1 \leq j \leq n$,
         \begin{equation}
             F_0(\vect{x}_j) = \argmin_{\gamma} \sum_{i = 1}^{n} L(y_i, \gamma).
         \end{equation}   
-    \item[Step~2] For $m = 1$ to $M$ (the maximum number of trees):
+    \item[Step~2] For $m = 1$ to $M$:
         \begin{enumerate}
             \item For each $i \in [1, \ldots, n]$, compute the pseudo residuals:
                 \begin{equation} \label{eqn:pseudo_residuals}
